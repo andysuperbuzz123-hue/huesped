@@ -1,0 +1,1277 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>El Huésped — Mansión</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050507;color:#eee;font-family:Arial,Helvetica,sans-serif}button,input{font:inherit}button{cursor:pointer}.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#030305;z-index:100}.hidden{display:none!important}
+#intro{background:#020205;padding:12px}.cine{position:relative;width:min(1000px,calc(100vw - 24px),calc((100vh - 24px)*1000/650));height:auto;aspect-ratio:1000/650;max-height:calc(100vh - 24px);overflow:hidden;border:2px solid #4c3942;background:#08090d;box-shadow:0 0 70px #000}.scene{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;overflow:hidden}.scene.on{display:flex}.sceneText{position:absolute;left:8%;right:8%;bottom:9%;z-index:5;text-shadow:0 3px 15px #000}.sceneTitle{font-size:clamp(30px,5vw,64px);letter-spacing:5px;font-weight:800}.sceneSub{font-size:18px;line-height:1.5;max-width:760px;margin:10px auto}.street{background:linear-gradient(#101321 0 56%,#242127 56%);}.street:after{content:"";position:absolute;left:0;right:0;bottom:0;height:44%;background:repeating-linear-gradient(90deg,transparent 0 75px,rgba(230,205,130,.12) 75px 78px)}.road{position:absolute;bottom:0;left:0;right:0;height:44%;background:#1c1a20}.lamp{position:absolute;width:8px;height:220px;background:#17151a;bottom:25%;box-shadow:0 0 15px #000}.lamp:after{content:"";position:absolute;width:100px;height:100px;left:-46px;top:-8px;border-radius:50%;background:radial-gradient(circle,#e7c87855,#0000 70%)}.l1{left:18%}.l2{right:18%}.heroC,.cultC{position:absolute;bottom:25%;width:32px;height:78px;background:#315789;border-radius:4px;z-index:3}.heroC{left:49%;animation:walk 1s infinite alternate}.heroC:before,.cultC:before{content:"";position:absolute;width:27px;height:27px;left:2px;top:-25px;border-radius:50%;background:#9b6a51}.heroC:after{content:"";position:absolute;left:-7px;right:-7px;bottom:-8px;height:12px;background:linear-gradient(90deg,#1b273b 0 40%,transparent 40% 60%,#1b273b 60%)}.cultC{background:#202027}.c1{left:25%;animation:approach 2.5s forwards}.c2{right:25%;animation:approach2 2.5s forwards}.mansionScene{background:radial-gradient(circle at 50% 55%,#5a4c48,#17151c 48%,#030305 85%)}.house{position:relative;width:470px;height:300px;background:#121219;border:5px solid #66505a;box-shadow:0 0 80px #000}.house:before{content:"";position:absolute;left:-50px;top:-120px;border-left:280px solid transparent;border-right:280px solid transparent;border-bottom:135px solid #24202a}.win{position:absolute;width:58px;height:70px;bottom:80px;background:#d29a59;box-shadow:0 0 35px #d29a59}.w1{left:75px}.w2{right:75px}.doorC{position:absolute;width:82px;height:125px;left:194px;bottom:0;background:#49352f;border:3px solid #9d775f}.darkScene{background:#000}.darkScene .sceneTitle{animation:flicker 1s infinite}.skip{position:absolute;right:16px;top:16px;z-index:20;background:#0c0c11;color:#eee;border:1px solid #68505b;padding:9px 14px}.bar{position:absolute;left:8%;right:8%;bottom:3%;height:4px;background:#2b2830;z-index:20}.bar span{display:block;height:100%;width:0;background:#bd7e8b;transition:width .15s}
+#menu{background:radial-gradient(circle,#24202a,#07070a 70%)}.menuBox{width:min(700px,92vw);text-align:center;padding:38px;background:#09090eeb;border:1px solid #6b4b55;box-shadow:0 0 70px #000}.menuBox h1{font-size:clamp(40px,7vw,80px);margin:0 0 6px}.menuBox p{color:#c9bbc0}.menuBtn{display:block;width:min(380px,90%);margin:12px auto;padding:13px;border:1px solid #8e6470;background:#17151b;color:#fff}.menuBtn:hover{background:#2a2027}
+#gameScreen{position:fixed;inset:0;background:#060609;display:flex;align-items:center;justify-content:center}.gameWrap{position:relative;width:min(1100px,calc(100vw - 24px),calc((100vh - 24px)*1000/650));aspect-ratio:1000/650;max-height:calc(100vh - 24px);border:2px solid #332d34;background:#0a0a0d;box-shadow:0 0 45px #000;overflow:hidden}.gameWrap canvas{display:block;width:100%;height:100%}.hud{position:absolute;top:12px;left:12px;right:12px;display:grid;grid-template-columns:170px minmax(300px,1fr) 110px;gap:10px;z-index:10;pointer-events:none}.hudBox{background:#09090ddd;border:1px solid #57434a;padding:8px 12px;min-height:55px}.hudLabel{font-size:10px;color:#aa9ba0;letter-spacing:1px}.hudVal{font-size:16px;margin-top:5px}.bottom{position:absolute;left:10px;right:10px;bottom:10px;display:flex;justify-content:space-between;align-items:end;gap:10px;z-index:10;pointer-events:none}.help{background:#09090ddd;padding:8px 10px;font-size:11px;line-height:1.25;max-width:62%;white-space:normal}.interact{background:#09090df2;border:1px solid #725761;padding:10px 18px;font-weight:bold;min-width:190px;text-align:center;display:none}.itemHud{position:absolute;right:12px;bottom:72px;width:240px;background:#09090de6;border:1px solid #5a454c;padding:9px;z-index:10;display:none}.itemHud b{color:#e2c17e}.message{position:absolute;left:50%;top:80px;transform:translateX(-50%);background:#08080cf2;border:1px solid #74505a;padding:10px 16px;z-index:15;display:none;white-space:nowrap}.life{letter-spacing:2px;color:#fff}.doorQuiz{position:absolute;inset:0;background:#000c;z-index:40;display:flex;align-items:center;justify-content:center}.quizBox{width:min(680px,92%);background:#0b0b10;border:2px solid #7d5962;padding:25px;box-shadow:0 0 60px #000}.quizTop{display:flex;justify-content:space-between;color:#caa4aa}.quizQuestion{font-size:22px;line-height:1.4;margin:18px 0}.answerGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.answerBtn{padding:13px;background:#17151b;color:#fff;border:1px solid #614850}.answerBtn:hover{background:#292027}.quizResult{min-height:24px;margin-top:12px}.final{position:fixed;inset:0;background:#000d;z-index:80;display:flex;align-items:center;justify-content:center}.finalBox{width:min(650px,92%);background:#09090e;border:2px solid #a26c55;padding:28px;text-align:center}.timer{font-size:54px;color:#f2c76d;font-weight:800}.timer.danger{color:#ff4c52;animation:pulse .4s infinite alternate}.finalQ{font-size:22px;line-height:1.4;margin:18px}.finalInput{width:100%;padding:13px;background:#14141a;color:#fff;border:1px solid #76535d;text-align:center;font-size:20px}.finalBtn{padding:12px 24px;margin-top:12px;background:#5c303a;color:#fff;border:1px solid #b27983}.inventory{position:fixed;inset:0;background:#000c;z-index:60;display:flex;align-items:center;justify-content:center}.invBox{width:min(700px,92%);background:#0b0b10;border:2px solid #5f4851;padding:24px}.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:15px}.slot{min-height:90px;border:1px solid #514149;background:#141419;padding:10px}.slot.sel{border-color:#e0b979;box-shadow:0 0 15px #e0b97933}.slotNum{color:#d7b76f}.capture .vignette{position:absolute;inset:0;background:radial-gradient(circle,transparent 5%,#000 78%);animation:shake .15s infinite}.captureEnemy{width:100px;height:190px;background:#15151c;border-radius:40px 40px 10px 10px;box-shadow:0 0 60px #b42f43;position:relative;animation:advance 3s forwards}.captureEnemy:before{content:"";position:absolute;left:13px;top:-66px;width:74px;height:74px;border-radius:50%;background:#342a2d}.eyes{position:absolute;top:-34px;left:29px;width:13px;height:13px;background:#ff5050;box-shadow:30px 0 #ff5050;animation:flicker .35s infinite}.captureText{position:absolute;bottom:12%;text-align:center;left:5%;right:5%;z-index:5}.escape{background:linear-gradient(#15263a 0 52%,#c48b55 52% 62%,#222 62%)}.escapeHouse{width:420px;height:290px;background:#15151c;border:5px solid #62515b;position:relative;box-shadow:0 0 70px #000}.escapeHouse:before{content:"";position:absolute;left:-45px;top:-110px;border-left:255px solid transparent;border-right:255px solid transparent;border-bottom:125px solid #26212a}.escapeDoor{position:absolute;bottom:0;left:169px;width:80px;height:135px;background:#63473b;border:3px solid #c39a76}.escapeHero{position:absolute;bottom:35px;left:195px;width:30px;height:72px;background:#315789;animation:runAway 4s forwards}.escapeHero:before{content:"";position:absolute;width:25px;height:25px;top:-24px;left:2px;border-radius:50%;background:#9b6a51}
+@keyframes walk{to{transform:translateX(20px)}}@keyframes approach{to{left:43%}}@keyframes approach2{to{right:43%}}@keyframes flicker{50%{opacity:.35}}@keyframes pulse{to{transform:scale(1.08)}}@keyframes shake{50%{transform:translate(5px,-3px)}}@keyframes advance{to{transform:scale(2.4) translateY(80px)}}@keyframes runAway{to{transform:translate(300px,-20px) scale(.3);opacity:.1}}
+@media(max-width:700px){.hud{grid-template-columns:105px 1fr 70px}.hudBox{padding:6px;font-size:11px}.answerGrid{grid-template-columns:1fr}.itemHud{width:180px}.help{font-size:10px}.interact{min-width:150px}}
+</style>
+
+<style id="room-view-stamina-fix">
+.stamina{height:7px;margin-top:7px;background:#25232a;border:1px solid #55464d;overflow:hidden}.stamina #staminaFill{height:100%;width:100%;background:#d9b56b;transition:width .08s}.staminaText{font-size:8px;color:#a99da1;margin-top:3px;text-align:right}.roomFlash{position:absolute;inset:0;background:#000;z-index:70;pointer-events:none;opacity:0;transition:opacity .12s}.roomNameBig{position:absolute;left:50%;top:82px;transform:translateX(-50%);z-index:9;background:#08080de6;border:1px solid #624b53;padding:8px 18px;letter-spacing:2px;font-size:12px;pointer-events:none}
+
+/* ESCAPE FINAL: mansion -> camino -> casa */
+.escapeStory{background:#050609;overflow:hidden}.escapeScene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;animation:escapeScene 12s linear forwards}.sceneHome1{animation-delay:0s;background:linear-gradient(#10172b 0 55%,#17131a 55%)}.sceneRoad{animation-delay:4s;background:linear-gradient(#11182a 0 58%,#19191d 58%)}.sceneHome2{animation-delay:8s;background:linear-gradient(#6e9ac0 0 62%,#58704c 62%)}
+.escapeCaption{position:absolute;bottom:8%;left:6%;right:6%;text-align:center;color:white;text-shadow:0 3px 8px #000;z-index:8}.escapeCaption b{display:block;font-size:clamp(24px,4vw,48px);letter-spacing:3px}.escapeCaption span{display:block;font-size:clamp(13px,2vw,21px);margin:10px auto 18px}.escapeMoon{position:absolute;width:90px;height:90px;border-radius:50%;background:#d8d5b7;right:15%;top:12%;box-shadow:0 0 45px #c7c7a0}.escapeMansionBack{position:absolute;bottom:16%;width:360px;height:250px;background:#17141c;border:5px solid #38313b;clip-path:polygon(12% 100%,12% 35%,50% 0,88% 35%,88% 100%)}.escapeMansionBack:after{content:'';position:absolute;left:42%;bottom:0;width:55px;height:110px;background:#49352f}.escapeHero{position:absolute;width:28px;height:68px;background:#315789;border-radius:4px;z-index:4}.escapeHero:before{content:'';position:absolute;width:24px;height:24px;left:2px;top:-22px;border-radius:50%;background:#8f624e}.heroRun1{bottom:24%;left:50%;animation:heroLeave 3.8s linear forwards}.road{position:absolute;bottom:0;width:70%;height:43%;background:#25252a;clip-path:polygon(25% 0,75% 0,100% 100%,0 100%)}.streetLight{position:absolute;right:18%;bottom:28%;width:9px;height:220px;background:#25252a}.streetLight:before{content:'';position:absolute;left:-28px;top:-10px;width:65px;height:22px;border-radius:50%;background:#f1d77a;box-shadow:0 0 35px #f1d77a}.heroRun2{left:18%;bottom:18%;animation:heroRoad 3.6s linear forwards}.homeSky{position:absolute;inset:0 0 38%;background:linear-gradient(#78a9d0,#c9d9dc)}.homeGround{position:absolute;inset:62% 0 0;background:#527047}.homeHouse{position:absolute;width:390px;height:230px;bottom:17%;background:#d7c3a3;border:5px solid #745c4d;box-shadow:0 20px 0 #b39b7d}.homeHouse:before{content:'';position:absolute;left:-35px;top:-105px;border-left:230px solid transparent;border-right:230px solid transparent;border-bottom:115px solid #684d43}.homeWindow{position:absolute;left:55px;top:65px;width:78px;height:62px;background:#9cc7d9;border:6px solid #624b42}.homeWindow:after{content:'';position:absolute;left:34px;top:0;height:100%;border-left:5px solid #624b42}.homeDoor{position:absolute;right:62px;bottom:0;width:70px;height:130px;background:#74513f;border:5px solid #52392f}.heroHome{bottom:18%;left:50%;animation:heroHomeIn 3s linear forwards}.sceneHome2 .escapeCaption{bottom:5%}@keyframes escapeScene{0%,27%{opacity:0}30%,61%{opacity:1}64%,100%{opacity:0}}@keyframes heroLeave{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-300px,-90px) scale(.55);opacity:.15}}@keyframes heroRoad{0%{transform:translate(0,0)}100%{transform:translate(500px,-15px)}}@keyframes heroHomeIn{0%{transform:translate(-260px,15px)}70%{transform:translate(0,0)}100%{transform:translate(0,0)}}
+@media(max-width:700px){.escapeMansionBack{transform:scale(.72)}.homeHouse{transform:scale(.7)}.escapeCaption{bottom:5%}}
+</style>
+</head>
+<body>
+<div id="intro" class="screen">
+  <div class="cine">
+    <button class="skip" id="skipIntro">SALTAR</button>
+    <div class="scene street on" data-time="3.2"><div class="road"></div><div class="lamp l1"></div><div class="lamp l2"></div><div class="heroC"></div><div class="sceneText"><div class="sceneTitle">11:47 PM</div><div class="sceneSub">Regresas a casa después de una fiesta. La calle está casi vacía.</div></div></div>
+    <div class="scene street" data-time="3.2"><div class="road"></div><div class="lamp l1"></div><div class="lamp l2"></div><div class="heroC"></div><div class="cultC c1"></div><div class="cultC c2"></div><div class="sceneText"><div class="sceneTitle">PASOS DETRÁS DE TI</div><div class="sceneSub">Volteas. Dos siluetas aparecen al final de la calle y comienzan a acercarse.</div></div></div>
+    <div class="scene darkScene" data-time="2.4"><div class="sceneText"><div class="sceneTitle">TE RODEAN</div><div class="sceneSub">Intentas escapar, pero otras sombras aparecen. Todo se vuelve borroso.</div></div></div>
+    <div class="scene mansionScene" data-time="3.2"><div class="house"><div class="win w1"></div><div class="win w2"></div><div class="doorC"></div></div><div class="sceneText"><div class="sceneTitle">DESPIERTAS</div><div class="sceneSub">Abres los ojos dentro de una mansión desconocida. Hay una sola salida... y está cerrada.</div></div></div>
+    <div class="bar"><span id="introBar"></span></div>
+  </div>
+</div>
+<div id="menu" class="screen hidden"><div class="menuBox"><h1>EL HUÉSPED</h1><p>Terror psicológico • Exploración • Acertijos</p><button class="menuBtn" id="startBtn">COMENZAR</button><p>Una sola vida. Cada puerta tiene un acertijo. Dos vigilantes recorren la mansión.</p></div></div>
+<div id="gameScreen" class="hidden"><div class="gameWrap"><div class="roomFlash" id="roomFlash"></div><div class="roomNameBig" id="roomNameBig"></div><canvas id="canvas" width="1000" height="650"></canvas><div class="hud"><div class="hudBox"><div class="hudLabel">ESTADO</div><div class="hudVal life" id="life">♥</div></div><div class="hudBox"><div class="hudLabel">OBJETIVO</div><div class="hudVal" id="objective">Encuentra la llave y escapa</div></div><div class="hudBox"><div class="hudLabel">TIEMPO</div><div class="hudVal" id="time">05:00</div><div class="stamina"><div id="staminaFill"></div></div><div class="staminaText">ESTAMINA <span id="staminaText">100</span>%</div></div></div><div class="itemHud" id="itemHud"></div><div class="message" id="message"></div><div class="bottom"><div class="help">WASD / Flechas: mover • SHIFT: correr • E: interactuar • I/O/P/K/L/Ñ: objetos • I: inventario</div><div class="interact" id="interact"></div></div></div></div>
+<div id="doorQuiz" class="doorQuiz hidden"><div class="quizBox"><div class="quizTop"><span id="quizType">ACERTIJO</span><span>Puerta</span></div><div class="quizQuestion" id="quizQuestion"></div><div class="answerGrid" id="answers"></div><div class="quizResult" id="quizResult"></div></div></div>
+<div id="inventory" class="inventory hidden"><div class="invBox"><h2>INVENTARIO</h2><p>Presiona 1, 2, 3 o 4 para seleccionar un objeto.</p><div class="slots" id="slots"></div><button class="menuBtn" id="closeInv">CERRAR</button></div></div>
+<div id="finalChallenge" class="final hidden"><div class="finalBox"><div style="letter-spacing:2px;color:#d8a6a8">PUERTA DE SALIDA</div><div class="timer" id="finalTimer">10</div><div class="finalQ" id="finalQ"></div><input id="finalInput" class="finalInput" inputmode="numeric" autocomplete="off" placeholder="Respuesta"><button id="finalBtn" class="finalBtn">RESOLVER</button><div id="finalResult" style="min-height:25px;margin-top:10px"></div></div></div>
+<div id="capture" class="screen hidden capture"><div class="vignette"></div><div class="captureEnemy"><div class="eyes"></div></div><div class="captureText"><div class="sceneTitle">¡TE ATRAPARON!</div><div class="sceneSub">El vigilante te encontró dentro de la mansión. Esta vez no pudiste esconderte.</div></div></div>
+<div id="escape" class="screen hidden escapeStory">
+  <div class="escapeScene sceneHome1">
+    <div class="escapeMoon"></div><div class="escapeMansionBack"></div>
+    <div class="escapeHero heroRun1"></div>
+    <div class="escapeCaption"><b>¡LO LOGRASTE!</b><span>Sales de la mansión y corres sin mirar atrás...</span></div>
+  </div>
+  <div class="escapeScene sceneRoad">
+    <div class="road"></div><div class="streetLight"></div><div class="escapeHero heroRun2"></div>
+    <div class="escapeCaption"><b>LA NOCHE QUEDA ATRÁS</b><span>Después de un largo camino, reconoces el barrio...</span></div>
+  </div>
+  <div class="escapeScene sceneHome2">
+    <div class="homeSky"></div><div class="homeGround"></div>
+    <div class="homeHouse"><div class="homeWindow"></div><div class="homeDoor"></div></div>
+    <div class="escapeHero heroHome"></div>
+    <div class="escapeCaption"><b>LLEGAS A CASA</b><span>Finalmente estás a salvo. Tu familia te recibe y puedes descansar.</span><button class="menuBtn" id="finishBtn">VOLVER A JUGAR</button></div>
+  </div>
+</div>
+<script>
+'use strict';
+const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
+const W=1000,H=650;
+const keys={};
+let running=false,paused=false,quizOpen=false,finalOpen=false,finalTimer=null,timeLeft=300,messageTimer=null,raf=0;
+let introIndex=0,introStart=performance.now(),introTimer=null;
+let selectedSlot=0, stamina=100, currentRoom=-1, lastRoom=-1, roomTransition=0;
+let enemyProtectionUntil=0;
+const player={x:65,y:95,w:24,h:34,speed:2.45,hidden:false,closet:null};
+const rooms=[
+ {x:30,y:30,w:230,h:190,name:'Vestíbulo'}, {x:270,y:30,w:220,h:190,name:'Biblioteca'}, {x:500,y:30,w:220,h:190,name:'Estudio'}, {x:730,y:30,w:240,h:190,name:'Galería'},
+ {x:30,y:240,w:230,h:190,name:'Comedor'}, {x:270,y:240,w:220,h:190,name:'Salón'}, {x:500,y:240,w:220,h:190,name:'Sala de música'}, {x:730,y:240,w:240,h:190,name:'Dormitorio'},
+ {x:30,y:450,w:230,h:170,name:'Cocina'}, {x:270,y:450,w:220,h:170,name:'Laboratorio'}, {x:500,y:450,w:220,h:170,name:'Sótano'}, {x:730,y:450,w:240,h:170,name:'Capilla'},
+ {x:30,y:30,w:0,h:0,name:'Almacén'}, {x:0,y:0,w:0,h:0,name:'Pasadizo'}
+];
+const walls=[]; const doors=[]; const closets=[]; const furniture=[]; const clues=[];
+function addWall(x,y,w,h){walls.push({x,y,w,h})}
+function addDoor(x,y,w,h,roomA,roomB){doors.push({x,y,w,h,open:false,locked:true,roomA,roomB,quizDone:false,id:doors.length+1})}
+// Exterior
+addWall(0,0,1000,30);addWall(0,620,1000,30);addWall(0,0,30,650);addWall(970,0,30,650);
+// Internal vertical boundaries, each with a 70px door opening
+const vx=[260,490,720], rows=[30,240,450];
+for(const x of vx){for(let r=0;r<3;r++){const y=rows[r],h=r===2?170:190;const dy=y+h/2-35;addWall(x,y,25,dy-y);addWall(x,dy+70,25,y+h-(dy+70));addDoor(x,dy,25,70,r*4+Math.floor(x/230),r*4+Math.floor(x/230)+1)}}
+// Horizontal boundaries, four doors per row boundary
+const ys=[220,430];
+for(const y of ys){for(let c=0;c<4;c++){const x=c===0?30:c===1?270:c===2?500:730;const w=c===0?230:c===1?220:c===2?220:240;const dx=x+w/2-35;addWall(x,y,w>70?dx-x:0,25);addWall(dx+70,y,x+w-(dx+70),25);addDoor(dx,y,70,25,c+(y===220?0:4),c+(y===220?4:8))}}
+// Improve gaps at intersections so there is always a usable route
+function rectHit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
+// Furniture, closets and clue/defensive objects distributed through rooms
+const objects=[
+ {room:0,x:100,y:145,name:'Silbato',desc:'Un silbato fuerte. Asusta al vigilante cercano y lo obliga a retroceder.',type:'whistle'},
+ {room:1,x:355,y:125,name:'Libro pesado',desc:'Un libro grueso que puedes lanzar para distraer a un vigilante durante unos segundos.',type:'book'},
+ {room:2,x:610,y:125,name:'Linterna UV',desc:'Una luz intensa que deslumbra brevemente al vigilante cercano.',type:'uv'},
+ {room:3,x:840,y:130,name:'Campana',desc:'Al activarla, hace ruido y atrae al vigilante hacia esa habitación.',type:'bell'},
+ {room:4,x:105,y:330,name:'Espejo',desc:'Refleja la luz y desorienta al vigilante durante un instante.',type:'mirror'},
+ {room:5,x:355,y:335,name:'Tiza',desc:'Marca una pared y crea una distracción sonora al frotarla.',type:'chalk'},
+ {room:6,x:610,y:335,name:'Reloj',desc:'Puedes hacer sonar su alarma para distraer a un vigilante.',type:'clock'},
+ {room:7,x:840,y:335,name:'Radio',desc:'Emite ruido y atrae a un vigilante lejos de tu posición.',type:'radio'},
+ {room:8,x:105,y:535,name:'Cuchara metálica',desc:'Golpea una tubería para crear ruido y distraer.',type:'spoon'},
+ {room:9,x:355,y:535,name:'Frasco de luz',desc:'Emite un destello que deja al vigilante aturdido brevemente.',type:'flash'},
+ {room:10,x:610,y:535,name:'Timbre',desc:'Activa el timbre para distraer al vigilante más cercano.',type:'bell2'},
+ {room:11,x:840,y:535,name:'Vela',desc:'Una vela que puedes usar para crear una pequeña señal de luz y desorientar.',type:'candle'}
+];
+for(const o of objects){clues.push({...o,collected:false})}
+for(let i=0;i<12;i++){const r=rooms[i];closets.push({x:r.x+r.w-55,y:r.y+40,w:35,h:75,room:i})}
+for(let i=0;i<12;i++){const r=rooms[i];furniture.push({x:r.x+55,y:r.y+70,w:70,h:35,room:i});furniture.push({x:r.x+r.w-120,y:r.y+r.h-65,w:70,h:35,room:i})}
+const key={x:615,y:565,collected:false};
+const exit={x:475,y:30,w:70,h:25,locked:true};
+const enemies=[
+ {x:440,y:95,w:24,h:36,facing:1,state:'patrol',target:0,vision:190,angle:Math.PI*.55,speed:1.05,lastX:440,lastY:95,search:0,color:'#3b2730'},
+ {x:850,y:335,w:24,h:36,facing:-1,state:'patrol',target:10,vision:205,angle:Math.PI*.55,speed:1.0,lastX:850,lastY:335,search:0,color:'#27243a'}
+];
+const patrolPoints=[
+ [{x:100,y:100},{x:400,y:100},{x:610,y:100},{x:850,y:100},{x:850,y:330},{x:610,y:330},{x:350,y:330},{x:100,y:330},{x:100,y:535},{x:350,y:535},{x:610,y:535},{x:850,y:535}],
+ [{x:850,y:535},{x:610,y:535},{x:350,y:535},{x:100,y:535},{x:100,y:330},{x:350,y:330},{x:610,y:330},{x:850,y:330},{x:850,y:100},{x:610,y:100},{x:400,y:100},{x:100,y:100}]
+];
+const questions=[
+ ['Matemáticas','Si 7×8 = ?', ['54','56','64','48'],'56'],
+ ['Historia','¿En qué año se proclamó la independencia del Perú?', ['1810','1821','1830','1845'],'1821'],
+ ['Inglés','¿Qué significa "book"?', ['Casa','Libro','Puerta','Mesa'],'Libro'],
+ ['Ciencia','¿Qué órgano bombea la sangre?', ['Pulmón','Cerebro','Corazón','Riñón'],'Corazón'],
+ ['Geografía','¿Cuál es la capital del Perú?', ['Arequipa','Cusco','Lima','Tacna'],'Lima'],
+ ['Matemáticas','Si tienes 45 y restas 17, ¿cuánto queda?', ['28','32','27','30'],'28'],
+ ['Comunicación','¿Cuál es un sinónimo de "rápido"?', ['Lento','Veloz','Triste','Pequeño'],'Veloz'],
+ ['Historia','¿Quién fue conocido como el Libertador de Venezuela, Colombia, Ecuador y Bolivia?', ['Simón Bolívar','Miguel Grau','Túpac Amaru II','José Olaya'],'Simón Bolívar'],
+ ['Ciencia','¿Qué gas necesitamos principalmente para respirar?', ['Oxígeno','Helio','Hidrógeno','Nitrógeno'],'Oxígeno'],
+ ['Matemáticas','¿Cuánto es 144 ÷ 12?', ['10','11','12','14'],'12']
+];
+let currentDoor=null,currentQuestion=null;
+function roomAt(x,y){for(let i=0;i<12;i++){const r=rooms[i];if(x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h)return i}return -1}
+function collides(x,y,w,h,ignoreOpenDoors=true){const a={x,y,w,h};for(const wall of walls){if(rectHit(a,wall))return true}for(const d of doors){if(!d.open&&rectHit(a,d))return true}/* Los muebles son decorativos y no bloquean al jugador; así nunca se atasca. */return false}
+function dist(a,b,c,d){return Math.hypot(a-c,b-d)}
+function showMsg(t){const el=document.getElementById('message');el.textContent=t;el.style.display='block';clearTimeout(messageTimer);messageTimer=setTimeout(()=>el.style.display='none',2400)}
+function resetGame(){player.x=70;player.y=100;player.hidden=false;player.closet=null;key.collected=false;doors.forEach(d=>{d.open=false;d.locked=true;d.quizDone=false});clues.forEach(o=>o.collected=false);enemies[0].x=440;enemies[0].y=95;enemies[1].x=850;enemies[1].y=335;enemies.forEach((e,i)=>{e.state='patrol';e.target=i?0:0;e.search=0});timeLeft=300;selectedSlot=0;stamina=100;currentRoom=roomAt(player.x+player.w/2,player.y+player.h/2);lastRoom=currentRoom;running=true;paused=false;quizOpen=false;finalOpen=false;document.getElementById('life').textContent='♥';updateHUD();updateInventoryHud();startTimer()}
+function startTimer(){clearInterval(window.mainTimer);window.mainTimer=setInterval(()=>{if(running&&!paused&&!quizOpen&&!finalOpen){timeLeft--;if(timeLeft<=0){timeLeft=0;gameOver()};updateHUD()}},1000)}
+function updateHUD(){document.getElementById('time').textContent=fmt(timeLeft);const r=roomAt(player.x+player.w/2,player.y+player.h/2);if(r!==currentRoom){lastRoom=currentRoom;currentRoom=r;roomTransition=1;const f=document.getElementById('roomFlash');f.style.opacity='1';setTimeout(()=>f.style.opacity='0',140)}document.getElementById('objective').textContent=r>=0?'Habitación: '+rooms[r].name:'Pasillo';document.getElementById('roomNameBig').textContent=r>=0?rooms[r].name.toUpperCase():'PASILLO';const sf=document.getElementById('staminaFill');sf.style.width=stamina+'%';document.getElementById('staminaText').textContent=Math.round(stamina);const item=clues.find(o=>o.collected);document.getElementById('itemHud').style.display=item?'block':'none';if(item)document.getElementById('itemHud').innerHTML='<b>Objeto:</b> '+item.name+'<br><small>'+item.desc+'</small>'}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function nearestDoor(){let best=null,bd=80;for(const d of doors){const dd=dist(player.x+12,player.y+17,d.x+d.w/2,d.y+d.h/2);if(dd<bd){best=d;bd=dd}}return best}
+function nearestObject(){let best=null,bd=58;for(const o of clues){if(o.collected)continue;const dd=dist(player.x+12,player.y+17,o.x,o.y);if(dd<bd){best=o;bd=dd}}return best}
+function nearestCloset(){let best=null,bd=62;for(const c of closets){const dd=dist(player.x+12,player.y+17,c.x+c.w/2,c.y+c.h/2);if(dd<bd){best=c;bd=dd}}return best}
+function updateInteraction(){const el=document.getElementById('interact');let t='';if(player.hidden)t='[E] SALIR DEL ESCONDITE';else if(nearestObject())t='[E] RECOGER '+nearestObject().name.toUpperCase();else if(nearestCloset())t='[E] ESCONDERSE';else if(nearestDoor()){const d=nearestDoor();t=d.open?'[E] CERRAR PUERTA':'[E] RESOLVER ACERTIJO';}else if(dist(player.x+12,player.y+17,key.x,key.y)<55&&!key.collected)t='[E] RECOGER LLAVE';else if(dist(player.x+12,player.y+17,exit.x+35,exit.y+12)<80)t='[E] ABRIR SALIDA';el.textContent=t;el.style.display=t?'block':'none'}
+function interact(){if(!running||paused||quizOpen||finalOpen)return;if(player.hidden){leaveHide();return}const o=nearestObject();if(o){o.collected=true;showMsg('Has encontrado: '+o.name);updateHUD();return}const c=nearestCloset();if(c){hideIn(c);return}const d=nearestDoor();if(d){if(d.open){d.open=false;showMsg('Puerta cerrada.')}else{openDoorQuiz(d)}return}if(dist(player.x+12,player.y+17,key.x,key.y)<55&&!key.collected){key.collected=true;showMsg('Encontraste la llave antigua.');return}if(dist(player.x+12,player.y+17,exit.x+35,exit.y+12)<80){if(!key.collected){showMsg('Necesitas la llave antigua.');return}openFinal()}}
+function openDoorQuiz(d){currentDoor=d;paused=true;quizOpen=true;currentQuestion=questions[Math.floor(Math.random()*questions.length)];document.getElementById('quizType').textContent=currentQuestion[0];document.getElementById('quizQuestion').textContent=currentQuestion[1];const box=document.getElementById('answers');box.innerHTML='';document.getElementById('quizResult').textContent='';currentQuestion[2].forEach(a=>{const b=document.createElement('button');b.className='answerBtn';b.textContent=a;b.onclick=()=>answerDoor(a);box.appendChild(b)});document.getElementById('doorQuiz').classList.remove('hidden')}
+function answerDoor(a){if(a===currentQuestion[3]){currentDoor.locked=false;currentDoor.quizDone=true;currentDoor.open=true;document.getElementById('quizResult').textContent='✓ Correcto. La puerta se abrió.';setTimeout(()=>{document.getElementById('doorQuiz').classList.add('hidden');quizOpen=false;paused=false;showMsg('Puerta abierta. Puedes continuar.');},650)}else{document.getElementById('quizResult').textContent='✗ Respuesta incorrecta. Inténtalo otra vez.'}}
+function hideIn(c){
+  player.hidden=true;
+  player.closet=c;
+  /* El personaje entra físicamente al armario y deja de ser visible. */
+  player.x=c.x+6;
+  player.y=c.y+20;
+  enemies.forEach(e=>{
+    if(e.state==='chase'){
+      /* El enemigo llega hasta el lugar donde te vio, pero al no encontrarte
+         abandona la persecución y continúa su patrulla. */
+      e.state='patrol';
+      e.search=0;
+      e.pauseUntil=performance.now()+900;
+    }
+  });
+  showMsg('Te escondiste en el armario. El vigilante perdió tu rastro y se fue.');
+  updateInteraction();
+}
+function leaveHide(){player.hidden=false;if(player.closet){player.x=player.closet.x+player.closet.w+8;player.y=player.closet.y+18}player.closet=null;updateInteraction()}
+function see(e){if(player.hidden)return false;const dx=player.x-e.x,dy=player.y-e.y,d=Math.hypot(dx,dy);if(d>e.vision)return false;const ang=Math.atan2(dy,dx),face=e.facing===1?0:Math.PI;let diff=Math.atan2(Math.sin(ang-face),Math.cos(ang-face));if(Math.abs(diff)>e.angle/2)return false;for(let i=1;i<d;i+=10){const px=e.x+dx*i/d,py=e.y+dy*i/d;if(walls.some(w=>px>w.x&&px<w.x+w.w&&py>w.y&&py<w.y+w.h))return false;if(doors.some(q=>!q.open&&px>q.x&&px<q.x+q.w&&py>q.y&&py<q.y+q.h))return false}return true}
+function enemyMove(e,tx,ty,speed){const dx=tx-e.x,dy=ty-e.y,d=Math.hypot(dx,dy);if(d<2)return true;const step=Math.min(speed,d);let nx=e.x+dx/d*step,ny=e.y+dy/d*step;e.facing=dx>=0?1:-1;if(!collides(nx,ny,e.w,e.h)){e.x=nx;e.y=ny}else{let sx=e.x+Math.sign(dx)*step,sy=e.y;if(!collides(sx,sy,e.w,e.h))e.x=sx;else{sx=e.x;sy=e.y+Math.sign(dy)*step;if(!collides(sx,sy,e.w,e.h))e.y=sy}}return false}
+function nearestOpenableDoorForEnemy(e){let best=null,bd=48;for(const d of doors){const dd=dist(e.x+12,e.y+18,d.x+d.w/2,d.y+d.h/2);if(dd<bd){best=d;bd=dd}}if(best&&!best.open){best.open=true;return true}return false}
+function updateEnemy(e,index){if(see(e)){e.state='chase';e.lastX=player.x;e.lastY=player.y;e.search=240}if(e.state==='patrol'){const pts=patrolPoints[index];const p=pts[e.target];if(enemyMove(e,p.x,p.y,e.speed)){e.target=(e.target+1)%pts.length}nearestOpenableDoorForEnemy(e)}else if(e.state==='chase'){nearestOpenableDoorForEnemy(e);enemyMove(e,player.x,player.y,e.speed*1.7);if(dist(e.x,e.y,player.x,player.y)<24){gameOver();return}if(!see(e)){e.state='search';e.search=180;e.lastX=player.x;e.lastY=player.y}}else if(e.state==='search'){nearestOpenableDoorForEnemy(e);if(enemyMove(e,e.lastX,e.lastY,e.speed*1.15))e.search--;if(e.search<=0)e.state='patrol'}if(dist(e.x,e.y,player.x,player.y)<22&&!player.hidden){gameOver()}}
+function useSelected(){const item=clues.filter(o=>o.collected)[selectedSlot];if(!item){showMsg('Ese espacio está vacío.');return}const target=enemies.reduce((a,b)=>dist(player.x,player.y,a.x,a.y)<dist(player.x,player.y,b.x,b.y)?a:b);const d=dist(player.x,player.y,target.x,target.y);if(d>220){showMsg('No hay ningún vigilante cerca.');return}target.state='search';target.lastX=target.x+80;target.lastY=target.y+40;target.search=260;target.x+=Math.sign(player.x-target.x)*-45;showMsg('Usaste '+item.name+'. El vigilante quedó distraído.');item.collected=false;updateHUD()}
+function updatePlayer(){if(player.hidden)return;let dx=0,dy=0;if(keys.w||keys.arrowup)dy--;if(keys.s||keys.arrowdown)dy++;if(keys.a||keys.arrowleft)dx--;if(keys.d||keys.arrowright)dx++;const moving=!!(dx||dy);const sprint=keys.shift&&moving&&stamina>0;if(sprint){stamina=Math.max(0,stamina-0.65)}else if(!moving){stamina=Math.min(100,stamina+0.38)}else{stamina=Math.min(100,stamina+0.12)}if(!moving)return;const len=Math.hypot(dx,dy);dx/=len;dy/=len;const sp=player.speed*(sprint?1.8:1);let nx=player.x+dx*sp,ny=player.y+dy*sp;if(!collides(nx,player.y,player.w,player.h))player.x=nx;if(!collides(player.x,ny,player.w,player.h))player.y=ny}
+function gameOver(){if(!running)return;running=false;clearInterval(window.mainTimer);document.getElementById('capture').classList.remove('hidden');setTimeout(()=>{document.getElementById('capture').onclick=()=>location.reload()},4300);setTimeout(()=>{document.getElementById('capture').querySelector('.sceneSub').textContent='La mansión permanece en silencio. Haz clic para volver a intentarlo.'},3000)}
+function openFinal(){finalOpen=true;paused=true;document.getElementById('finalQ').textContent='Una caja tiene 48 llaves y se reparten por igual entre 6 personas. ¿Cuántas llaves recibe cada una?';document.getElementById('finalInput').value='';document.getElementById('finalResult').textContent='';document.getElementById('finalChallenge').classList.remove('hidden');let s=10;document.getElementById('finalTimer').textContent=s;clearInterval(finalTimer);finalTimer=setInterval(()=>{s--;document.getElementById('finalTimer').textContent=s;if(s<=3)document.getElementById('finalTimer').classList.add('danger');if(s<=0){clearInterval(finalTimer);document.getElementById('finalResult').textContent='Se acabó el tiempo. La salida sigue cerrada.';setTimeout(()=>{finalOpen=false;paused=false;document.getElementById('finalChallenge').classList.add('hidden')},1000)}},1000)}
+function answerFinal(){const v=document.getElementById('finalInput').value.trim();if(v==='8'){clearInterval(finalTimer);finalOpen=false;paused=false;document.getElementById('finalChallenge').classList.add('hidden');running=false;document.getElementById('escape').classList.remove('hidden')}else{document.getElementById('finalResult').textContent='Respuesta incorrecta.'}}
+function updateInventoryHud(){const inv=document.getElementById('slots');inv.innerHTML='';for(let i=0;i<4;i++){const o=clues.filter(x=>x.collected)[i];const d=document.createElement('div');d.className='slot'+(i===selectedSlot?' sel':'');d.innerHTML='<div class="slotNum">'+(i+1)+'</div><div>'+(o?o.name:'Vacío')+'</div>';inv.appendChild(d)}}
+function toggleInventory(){document.getElementById('inventory').classList.toggle('hidden');updateInventoryHud()}
+function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle='#05070a';ctx.fillRect(0,0,W,H);const r=currentRoom>=0?rooms[currentRoom]:null;if(!r){ctx.fillStyle='#0b0b10';ctx.fillRect(0,0,W,H);return}const pad=14;const scale=Math.min((W-pad*2)/r.w,(H-110-pad*2)/r.h);const ox=(W-r.w*scale)/2-r.x*scale;const oy=88+(H-88-r.h*scale)/2-r.y*scale;ctx.save();ctx.translate(ox,oy);ctx.scale(scale,scale);/* base de la habitación */const roomPalettes=[['#18212b','#263747','#314554'],['#201a16','#3a2b20','#4a3728'],['#181b24','#303744','#454d5a'],['#211b28','#3a2c43','#4d3b55'],['#211b15','#3c3020','#51432b'],['#171d20','#2a3639','#39494c'],['#171723','#2b273b','#3b3450'],['#201a20','#3b2b30','#50383e'],['#202016','#39361f','#514d29'],['#151d1d','#283b39','#36504b'],['#15151b','#29232f','#3b3044'],['#1d1820','#362632','#4c3040']];const pal=roomPalettes[currentRoom]||roomPalettes[0];ctx.fillStyle=pal[0];ctx.fillRect(r.x,r.y,r.w,r.h);/* piso distinto por habitación */for(let yy=r.y;yy<r.y+r.h;yy+=22){for(let xx=r.x;xx<r.x+r.w;xx+=22){const n=(Math.floor((xx-r.x)/22)+Math.floor((yy-r.y)/22))%2;ctx.fillStyle=n?pal[1]:pal[2];ctx.fillRect(xx,yy,22,22)}}ctx.strokeStyle='#4b5257';ctx.lineWidth=4;ctx.strokeRect(r.x,r.y,r.w,r.h);/* solo objetos de la habitación actual */walls.forEach(w=>{if(rectHit(w,r)){ctx.fillStyle='#202a30';ctx.fillRect(w.x,w.y,w.w,w.h);ctx.strokeStyle='#596168';ctx.lineWidth=2;ctx.strokeRect(w.x,w.y,w.w,w.h)}});furniture.forEach(f=>{const fr=rooms[f.room??-1];if(rectHit(f,r)){ctx.fillStyle='#2b2024';ctx.fillRect(f.x,f.y,f.w,f.h);ctx.strokeStyle='#66484e';ctx.strokeRect(f.x,f.y,f.w,f.h)}});closets.forEach(c=>{if(c.room===currentRoom){ctx.fillStyle='#3b2a2d';ctx.fillRect(c.x,c.y,c.w,c.h);ctx.strokeStyle='#bd7b83';ctx.lineWidth=2;ctx.strokeRect(c.x,c.y,c.w,c.h);ctx.fillStyle='#e0c27d';ctx.fillRect(c.x+c.w-8,c.y+c.h/2,4,5)}});doors.forEach(d=>{if((d.roomA===currentRoom)||(d.roomB===currentRoom)){ctx.fillStyle=d.open?'#78655a':'#743f4b';ctx.fillRect(d.x,d.y,d.w,d.h);ctx.strokeStyle='#d2a18a';ctx.lineWidth=2;ctx.strokeRect(d.x,d.y,d.w,d.h);if(!d.open){ctx.fillStyle='#e1c16e';ctx.fillRect(d.x+d.w/2-2,d.y+d.h/2-2,5,5)}}});clues.forEach(o=>{if(!o.collected&&o.room===currentRoom){ctx.fillStyle='#d9b86f';ctx.fillRect(o.x-8,o.y-8,16,16);ctx.strokeStyle='#fff0ad';ctx.strokeRect(o.x-8,o.y-8,16,16)}});if(!key.collected&&roomAt(key.x,key.y)===currentRoom){ctx.fillStyle='#f1d27c';ctx.fillRect(key.x-5,key.y-5,10,10);ctx.fillRect(key.x+3,key.y-2,12,4)}if(roomAt(exit.x+35,exit.y+12)===currentRoom){ctx.fillStyle='#477052';ctx.fillRect(exit.x,exit.y,exit.w,exit.h);ctx.strokeStyle='#d2b38e';ctx.strokeRect(exit.x,exit.y,exit.w,exit.h)}enemies.forEach(e=>{if(roomAt(e.x+12,e.y+18)!==currentRoom)return;ctx.fillStyle=e.color;ctx.fillRect(e.x,e.y,e.w,e.h);ctx.fillStyle='#8d5f4b';ctx.beginPath();ctx.arc(e.x+12,e.y-8,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ff5757';ctx.fillRect(e.x+5,e.y-11,3,3);ctx.fillRect(e.x+16,e.y-11,3,3)});if(!player.hidden){ctx.fillStyle='#315789';ctx.fillRect(player.x,player.y+10,player.w,player.h-10);ctx.fillStyle='#9b6a51';ctx.fillRect(player.x+2,player.y-5,20,20);ctx.fillStyle='#5b3d2c';ctx.fillRect(player.x+2,player.y-7,20,6);ctx.fillStyle='#24334b';ctx.fillRect(player.x-5,player.y+16,5,15);ctx.fillRect(player.x+player.w,player.y+16,5,15);ctx.fillStyle='#d8e3ef';ctx.fillRect(player.x+5,player.y+13,14,6)}drawVision();drawLight();ctx.restore();/* marco */ctx.strokeStyle='#36343a';ctx.lineWidth=3;ctx.strokeRect(2,2,W-4,H-4)}
+function drawVision(){enemies.forEach(e=>{ctx.save();ctx.globalAlpha=.08;ctx.fillStyle=e.state==='chase'?'#e54b55':'#d7a06b';ctx.beginPath();ctx.moveTo(e.x+12,e.y+18);const a=e.facing===1?0:Math.PI;ctx.arc(e.x+12,e.y+18,e.vision,a-e.angle/2,a+e.angle/2);ctx.closePath();ctx.fill();ctx.restore()})}
+function drawLight(){const px=player.x+12,py=player.y+17;const g=ctx.createRadialGradient(px,py,20,px,py,190);g.addColorStop(0,'rgba(255,245,210,.38)');g.addColorStop(.5,'rgba(255,230,180,.12)');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(px,py,190,0,Math.PI*2);ctx.fill()}
+function loop(){updatePlayer();if(running&&!paused&&!quizOpen&&!finalOpen){enemies.forEach((e,i)=>updateEnemy(e,i));updateHUD()}updateInteraction();draw();raf=requestAnimationFrame(loop)}
+function startIntro(){const scenes=[...document.querySelectorAll('#intro .scene')];introIndex=0;introStart=performance.now();function next(){if(introIndex<scenes.length-1){scenes[introIndex].classList.remove('on');introIndex++;scenes[introIndex].classList.add('on');introStart=performance.now()}else{clearInterval(introTimer);document.getElementById('intro').classList.add('hidden');document.getElementById('menu').classList.remove('hidden')}}introTimer=setInterval(()=>{const dur=parseFloat(scenes[introIndex].dataset.time)*1000;const p=Math.min(1,(performance.now()-introStart)/dur);document.getElementById('introBar').style.width=((introIndex+p)/scenes.length*100)+'%';if(p>=1)next()},100)}
+document.getElementById('skipIntro').onclick=()=>{clearInterval(introTimer);document.getElementById('intro').classList.add('hidden');document.getElementById('menu').classList.remove('hidden')};document.getElementById('startBtn').onclick=()=>{document.getElementById('menu').classList.add('hidden');document.getElementById('gameScreen').classList.remove('hidden');resetGame()};document.getElementById('finalBtn').onclick=answerFinal;document.getElementById('finishBtn').onclick=()=>location.reload();document.getElementById('closeInv').onclick=toggleInventory;
+window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();keys[k]=true;if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();if(k==='e')interact();if(['1','2','3','4'].includes(k)){selectedSlot=Number(k)-1;updateInventoryHud()}if(k==='i'&&!quizOpen&&!finalOpen)toggleInventory();if(k==='enter'&&finalOpen)answerFinal()});window.addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});
+startIntro();loop();
+</script>
+<script id="big-room-controls-fix">
+(function(){
+  /* HABITACIONES MÁS GRANDES: 4 x 3, espacios amplios y sin muebles que bloqueen. */
+  const bigRooms=[
+    ['Vestíbulo','Vestíbulo',40,40],['Biblioteca','Biblioteca',460,40],['Estudio','Estudio',880,40],['Galería','Galería',1300,40],
+    ['Comedor','Comedor',40,340],['Salón','Salón',460,340],['Sala de música','Sala de música',880,340],['Dormitorio','Dormitorio',1300,340],
+    ['Cocina','Cocina',40,640],['Laboratorio','Laboratorio',460,640],['Sótano','Sótano',880,640],['Capilla','Capilla',1300,640]
+  ];
+  rooms.splice(0,rooms.length,...bigRooms.map(x=>({name:x[0],x:x[2],y:x[3],w:420,h:300})));
+
+  walls.length=0; doors.length=0;
+  const W=420,H=300,D=92,WT=22;
+  /* paredes exteriores */
+  addWall(40,40,1680,WT); addWall(40,940,1680,WT); addWall(40,40,WT,900); addWall(1698,40,WT,900);
+  /* límites verticales: 3 columnas, 3 filas, una puerta grande por unión */
+  for(let row=0;row<3;row++){
+    const y=40+row*H;
+    for(let col=0;col<3;col++){
+      const x=40+(col+1)*W;
+      const dy=y+H/2-D/2;
+      addWall(x,y,WT,dy-y);
+      addWall(x,dy+D,WT,y+H-(dy+D));
+      addDoor(x,dy,WT,D,row*4+col,row*4+col+1);
+    }
+  }
+  /* límites horizontales: 4 columnas, 2 filas, una puerta grande por unión */
+  for(let row=0;row<2;row++){
+    const y=40+(row+1)*H;
+    for(let col=0;col<4;col++){
+      const x=40+col*W;
+      const dx=x+W/2-D/2;
+      addWall(x,y,dx-x,WT);
+      addWall(dx+D,y,x+W-(dx+D),WT);
+      addDoor(dx,y,D,WT,row*4+col,(row+1)*4+col);
+    }
+  }
+
+  /* Objetos y escondites: mucho espacio libre alrededor. */
+  const itemData=[
+    ['Silbato','Un silbato para distraer al vigilante.','whistle'],['Libro pesado','Un libro que hace ruido al lanzarlo.','book'],
+    ['Linterna UV','Desorienta brevemente al vigilante.','uv'],['Campana','Atrae al vigilante hacia otra zona.','bell'],
+    ['Espejo','Desorienta al vigilante con un reflejo.','mirror'],['Tiza','Sirve para crear una distracción.','chalk'],
+    ['Reloj','Puedes activar su alarma.','clock'],['Radio','Emite ruido para atraer al enemigo.','radio'],
+    ['Cuchara metálica','Golpea una tubería y genera ruido.','spoon'],['Frasco de luz','Produce un destello.','flash'],
+    ['Timbre','Crea una distracción sonora.','bell2'],['Vela','Crea una señal de luz.','candle']
+  ];
+  clues.length=0; closets.length=0; furniture.length=0;
+  for(let i=0;i<12;i++){
+    const r=rooms[i];
+    clues.push({room:i,x:r.x+r.w/2,y:r.y+r.h/2,name:itemData[i][0],desc:itemData[i][1],type:itemData[i][2],collected:false});
+    closets.push({x:r.x+r.w-82,y:r.y+42,w:48,h:105,room:i});
+    /* muebles grandes pero decorativos: NO bloquean */
+    furniture.push({x:r.x+58,y:r.y+65,w:95,h:52,room:i});
+    furniture.push({x:r.x+55,y:r.y+r.h-105,w:110,h:52,room:i});
+  }
+  key.x=rooms[10].x+rooms[10].w/2; key.y=rooms[10].y+rooms[10].h/2+70; key.collected=false;
+  exit.x=rooms[11].x+rooms[11].w/2-45; exit.y=rooms[11].y; exit.w=90; exit.h=WT; exit.locked=true;
+
+  /* Dos enemigos: recorren las 12 habitaciones en circuitos distintos. */
+  const patrolA=[0,1,2,3,7,11,10,9,8,4,5,6];
+  const patrolB=[6,5,4,8,9,10,11,7,3,2,1,0];
+  function center(i){const r=rooms[i];return {x:r.x+r.w/2,y:r.y+r.h/2};}
+  patrolPoints[0]=patrolA.map(center);
+  patrolPoints[1]=patrolB.map(center);
+  enemies[0].x=center(0).x; enemies[0].y=center(0).y; enemies[0].target=1; enemies[0].speed=1.15; enemies[0].vision=250;
+  enemies[1].x=center(6).x; enemies[1].y=center(6).y; enemies[1].target=1; enemies[1].speed=1.1; enemies[1].vision=260;
+
+  /* Movimiento: SOLO WASD. SHIFT sigue siendo únicamente correr. */
+  window.addEventListener('keydown',function(e){
+    const k=e.key.toLowerCase();
+    if(['w','a','s','d','e','i','o','p','k','l','ñ','shift'].includes(k)){
+      if(k==='w'||k==='a'||k==='s'||k==='d'||k==='shift') keys[k]=true;
+      if(k==='e') interact();
+      const slots={'i':0,'o':1,'p':2,'k':3,'l':4,'ñ':5};
+      if(Object.prototype.hasOwnProperty.call(slots,k)){
+        selectedSlot=slots[k]; useSelected(); updateInventoryHud();
+      }
+      e.preventDefault();
+    }
+  },true);
+  window.addEventListener('keyup',function(e){const k=e.key.toLowerCase();if(['w','a','s','d','shift'].includes(k))keys[k]=false},true);
+
+  /* Sin flechas: el movimiento usa exclusivamente WASD. */
+  const oldUpdatePlayer=updatePlayer;
+  updatePlayer=function(){
+    if(player.hidden)return;
+    let dx=0,dy=0;
+    if(keys.w)dy--; if(keys.s)dy++; if(keys.a)dx--; if(keys.d)dx++;
+    const moving=!!(dx||dy);
+    const sprint=keys.shift&&moving&&stamina>0;
+    if(sprint) stamina=Math.max(0,stamina-0.58);
+    else if(!moving) stamina=Math.min(100,stamina+0.55);
+    else stamina=Math.min(100,stamina+0.18);
+    if(!moving)return;
+    const len=Math.hypot(dx,dy);dx/=len;dy/=len;
+    const sp=player.speed*(sprint?2.0:1);
+    let nx=player.x+dx*sp,ny=player.y+dy*sp;
+    if(!collides(nx,player.y,player.w,player.h))player.x=nx;
+    if(!collides(player.x,ny,player.w,player.h))player.y=ny;
+  };
+
+  /* Al cruzar una puerta, el jugador queda centrado en la nueva habitación. */
+  const oldInteract=interact;
+  interact=function(){ oldInteract(); };
+
+  /* Inventario: ahora se maneja con I O P K L Ñ; I ya no abre el inventario. */
+  const help=document.querySelector('.help');
+  if(help) help.textContent='W A S D: mover  •  SHIFT: correr  •  E: interactuar  •  I O P K L Ñ: usar objetos';
+  const inv=document.querySelector('#inventory .invBox p');
+  if(inv) inv.textContent='I · O · P · K · L · Ñ para seleccionar/usar tus objetos.';
+
+  /* Seis ranuras visibles y el resto queda vacío. */
+  updateInventoryHud=function(){
+    const el=document.getElementById('slots'); if(!el)return; el.innerHTML='';
+    const hot=['I','O','P','K','L','Ñ'];
+    for(let i=0;i<6;i++){
+      const o=clues.filter(x=>x.collected)[i];
+      const d=document.createElement('div');d.className='slot'+(i===selectedSlot?' sel':'');
+      d.innerHTML='<div class="slotNum">'+hot[i]+'</div><div>'+(o?o.name:'Vacío')+'</div>';
+      el.appendChild(d);
+    }
+  };
+  updateInventoryHud();
+})();
+</script><script id="enemy-ai-final-fix">
+(function(){
+  /* IA de enemigos: movimiento por habitaciones, puertas y persecución coherente. */
+  const CATCH_DISTANCE = 38;
+  const ROOM_REACH = 28;
+
+  function roomIndexForEnemy(e){
+    return roomAt(e.x+e.w/2,e.y+e.h/2);
+  }
+  function roomCenter(i){
+    const r=rooms[i];
+    return {x:r.x+r.w/2,y:r.y+r.h/2};
+  }
+  function connectedDoor(a,b){
+    for(const d of doors){
+      if((d.roomA===a&&d.roomB===b)||(d.roomA===b&&d.roomB===a)) return d;
+    }
+    return null;
+  }
+  function nextRoomOnPath(start,target){
+    if(start<0 || target<0 || start===target) return start;
+    const q=[start], prev=Array(12).fill(-1), seen=Array(12).fill(false);
+    seen[start]=true;
+    while(q.length){
+      const a=q.shift();
+      for(const d of doors){
+        let b=-1;
+        if(d.roomA===a)b=d.roomB;
+        else if(d.roomB===a)b=d.roomA;
+        if(b<0 || seen[b])continue;
+        seen[b]=true;prev[b]=a;q.push(b);
+        if(b===target){q.length=0;break;}
+      }
+    }
+    if(!seen[target])return start;
+    let cur=target;
+    while(prev[cur]!==-1 && prev[cur]!==start)cur=prev[cur];
+    return cur;
+  }
+  function pathTarget(e,targetRoom){
+    const er=roomIndexForEnemy(e);
+    if(er<0 || targetRoom<0)return null;
+    if(er===targetRoom)return roomCenter(targetRoom);
+    const next=nextRoomOnPath(er,targetRoom);
+    const d=connectedDoor(er,next);
+    if(!d)return roomCenter(next);
+    const cx=d.x+d.w/2, cy=d.y+d.h/2;
+    const dd=Math.hypot(cx-(e.x+e.w/2),cy-(e.y+e.h/2));
+    if(dd<ROOM_REACH){
+      d.open=true;
+      return roomCenter(next);
+    }
+    return {x:cx,y:cy};
+  }
+  function moveEnemySmart(e,tx,ty,speed){
+    const ex=e.x+e.w/2, ey=e.y+e.h/2;
+    let dx=tx-ex,dy=ty-ey,d=Math.hypot(dx,dy);
+    if(d<2)return true;
+    const step=Math.min(speed,d);
+    const ux=dx/d,uy=dy/d;
+    e.facing=ux>=0?1:-1;
+    /* Prefer diagonal movement, then slide along walls. */
+    let nx=e.x+ux*step, ny=e.y+uy*step;
+    if(!collides(nx,e.y,e.w,e.h))e.x=nx;
+    if(!collides(e.x,ny,e.w,e.h))e.y=ny;
+    if(Math.abs((e.x+e.w/2)-tx)<4 && Math.abs((e.y+e.h/2)-ty)<4)return true;
+    /* Si queda atascado, prueba primero X y luego Y. */
+    if(collides(nx,e.y,e.w,e.h) && collides(e.x,ny,e.w,e.h)){
+      nx=e.x+Math.sign(dx)*step;
+      if(!collides(nx,e.y,e.w,e.h))e.x=nx;
+      else{
+        ny=e.y+Math.sign(dy)*step;
+        if(!collides(e.x,ny,e.w,e.h))e.y=ny;
+      }
+    }
+    return false;
+  }
+
+  function setSearch(e){
+    e.state='search';
+    e.search=220;
+    e.lastX=player.x;
+    e.lastY=player.y;
+  }
+
+  updateEnemy=function(e,index){
+    if(!running || paused || player.hidden)return;
+
+    const playerRoom=roomAt(player.x+player.w/2,player.y+player.h/2);
+    const enemyRoom=roomIndexForEnemy(e);
+    const distance=Math.hypot((e.x+e.w/2)-(player.x+player.w/2),(e.y+e.h/2)-(player.y+player.h/2));
+
+    /* A muy corta distancia, el enemigo atrapa al jugador aunque no esté mirando exactamente de frente. */
+    if(distance<=CATCH_DISTANCE){
+      gameOver();
+      return;
+    }
+
+    if(see(e)){
+      e.state='chase';
+      e.lastX=player.x;
+      e.lastY=player.y;
+      e.search=260;
+    }
+
+    if(e.state==='patrol'){
+      const pts=patrolPoints[index]||[];
+      if(!pts.length)return;
+      const p=pts[e.target%pts.length];
+      moveEnemySmart(e,p.x,p.y,e.speed);
+      if(Math.hypot((e.x+e.w/2)-p.x,(e.y+e.h/2)-p.y)<22){
+        e.target=(e.target+1)%pts.length;
+      }
+    }
+    else if(e.state==='chase'){
+      if(player.hidden){setSearch(e);return;}
+      const pr=roomAt(player.x+player.w/2,player.y+player.h/2);
+      const er=roomIndexForEnemy(e);
+      if(pr===er){
+        /* Dentro de la misma habitación va directamente hacia el jugador. */
+        moveEnemySmart(e,player.x,player.y,e.speed*1.42);
+      }else{
+        /* Entre habitaciones: usa la puerta correcta, no atraviesa paredes. */
+        const t=pathTarget(e,pr);
+        if(t)moveEnemySmart(e,t.x,t.y,e.speed*1.30);
+      }
+      if(distance<=CATCH_DISTANCE){gameOver();return;}
+      if(!see(e)){
+        e.state='search';
+        e.search=180;
+        e.lastX=player.x;
+        e.lastY=player.y;
+      }
+    }
+    else if(e.state==='search'){
+      const er=roomIndexForEnemy(e);
+      const targetRoom=roomAt(e.lastX+player.w/2,e.lastY+player.h/2);
+      let t=null;
+      if(targetRoom>=0 && er!==targetRoom)t=pathTarget(e,targetRoom);
+      else t={x:e.lastX,y:e.lastY};
+      if(t)moveEnemySmart(e,t.x,t.y,e.speed*1.08);
+      e.search--;
+      if(see(e)){
+        e.state='chase';
+        e.lastX=player.x;
+        e.lastY=player.y;
+        e.search=260;
+      }else if(e.search<=0){
+        e.state='patrol';
+      }
+    }
+
+    /* Si termina pegado al jugador, captura inmediata. */
+    const finalD=Math.hypot((e.x+e.w/2)-(player.x+player.w/2),(e.y+e.h/2)-(player.y+player.h/2));
+    if(finalD<=CATCH_DISTANCE && !player.hidden)gameOver();
+  };
+
+  /* Dos rutas de patrulla diferentes, cubriendo toda la mansión. */
+  const routeA=[0,1,2,3,7,11,10,9,8,4,5,6];
+  const routeB=[6,5,4,8,9,10,11,7,3,2,1,0];
+  function center(i){return roomCenter(i)}
+  patrolPoints[0]=routeA.map(center);
+  patrolPoints[1]=routeB.map(center);
+
+  enemies[0].target=0;
+  enemies[1].target=0;
+  enemies[0].speed=1.15;
+  enemies[1].speed=1.10;
+  enemies[0].vision=210;
+  enemies[1].vision=220;
+
+  /* Dibuja un pequeño indicador visual cuando un enemigo está persiguiendo. */
+  const oldDraw=draw;
+  draw=function(){
+    oldDraw();
+    if(!running)return;
+    enemies.forEach(e=>{
+      if(roomIndexForEnemy(e)!==currentRoom)return;
+      if(e.state==='chase'){
+        ctx.save();
+        ctx.fillStyle='#ff6262';
+        ctx.font='bold 14px Arial';
+        ctx.textAlign='center';
+        ctx.fillText('!',(e.x+e.w/2)*1,Math.max(18,e.y-22));
+        ctx.restore();
+      }
+    });
+  };
+})();
+</script>
+
+<script id="enemy-movement-real-fix">
+(function(){
+  /* CORRECCIÓN REAL DE IA: los enemigos siguen las puertas que conectan las habitaciones.
+     Antes intentaban caminar directamente de centro a centro y chocaban contra las paredes. */
+  const ENEMY_CATCH = 38;
+  const ROOM_EPS = 18;
+  const PATROL_ROUTES = [
+    [0,1,2,3,7,11,10,9,8,4,5,6],
+    [6,5,4,8,9,10,11,7,3,2,1,0]
+  ];
+
+  function enemyRoom(e){
+    const cx=e.x+e.w/2, cy=e.y+e.h/2;
+    const direct=roomAt(cx,cy);
+    if(direct>=0)return direct;
+    /* Si está justo atravesando una puerta, usa la habitación más cercana. */
+    let best=-1,bd=Infinity;
+    rooms.forEach((r,i)=>{
+      const x=Math.max(r.x,Math.min(cx,r.x+r.w));
+      const y=Math.max(r.y,Math.min(cy,r.y+r.h));
+      const d=Math.hypot(cx-x,cy-y);
+      if(d<bd){bd=d;best=i;}
+    });
+    return best;
+  }
+
+  function centerRoom(i){
+    const r=rooms[i];
+    return {x:r.x+r.w/2,y:r.y+r.h/2};
+  }
+
+  function doorBetween(a,b){
+    return doors.find(d=>(d.roomA===a&&d.roomB===b)||(d.roomA===b&&d.roomB===a))||null;
+  }
+
+  function nextRoom(start,target){
+    if(start===target)return target;
+    const q=[start],prev=Array(12).fill(-1),seen=Array(12).fill(false);
+    seen[start]=true;
+    while(q.length){
+      const a=q.shift();
+      for(const d of doors){
+        let b=-1;
+        if(d.roomA===a)b=d.roomB;
+        else if(d.roomB===a)b=d.roomA;
+        if(b<0||seen[b])continue;
+        seen[b]=true;prev[b]=a;
+        if(b===target){q.length=0;break;}
+        q.push(b);
+      }
+    }
+    if(!seen[target])return start;
+    let cur=target;
+    while(prev[cur]!==-1 && prev[cur]!==start)cur=prev[cur];
+    return cur;
+  }
+
+  function doorPointForEnemy(e,d,next){
+    const cx=d.x+d.w/2,cy=d.y+d.h/2;
+    /* Punto ligeramente dentro de la siguiente habitación para que no se quede
+       pegado al marco después de cruzar. */
+    const r=rooms[next];
+    let x=cx,y=cy;
+    if(d.w<d.h){
+      x = next===d.roomB ? r.x+32 : r.x+r.w-32;
+    }else{
+      y = next===d.roomB ? r.y+32 : r.y+r.h-32;
+    }
+    return {x,y};
+  }
+
+  function openDoorForAI(d){
+    if(!d.open){
+      d.open=true;
+      d.aiOpened=true;
+    }
+  }
+
+  function moveEnemy(e,tx,ty,speed){
+    const ex=e.x+e.w/2,ey=e.y+e.h/2;
+    const dx=tx-ex,dy=ty-ey,dd=Math.hypot(dx,dy);
+    if(dd<ROOM_EPS)return true;
+    const step=Math.min(speed,dd);
+    const ux=dx/dd,uy=dy/dd;
+    e.facing=ux>=0?1:-1;
+
+    /* Primero intenta ambos ejes por separado. Esto evita que una esquina
+       de una pared congele al enemigo. */
+    let moved=false;
+    let nx=e.x+ux*step;
+    if(!collides(nx,e.y,e.w,e.h)){e.x=nx;moved=true;}
+    let ny=e.y+uy*step;
+    if(!collides(e.x,ny,e.w,e.h)){e.y=ny;moved=true;}
+
+    if(!moved){
+      nx=e.x+Math.sign(dx)*step;
+      if(!collides(nx,e.y,e.w,e.h)){e.x=nx;moved=true;}
+      ny=e.y+Math.sign(dy)*step;
+      if(!collides(e.x,ny,e.w,e.h)){e.y=ny;moved=true;}
+    }
+    return Math.hypot((e.x+e.w/2)-tx,(e.y+e.h/2)-ty)<ROOM_EPS;
+  }
+
+  function goToRoom(e,targetRoom,speed){
+    const er=enemyRoom(e);
+    if(er<0||targetRoom<0)return;
+    if(er===targetRoom){
+      return moveEnemy(e,centerRoom(targetRoom).x,centerRoom(targetRoom).y,speed);
+    }
+    const next=nextRoom(er,targetRoom);
+    const d=doorBetween(er,next);
+    if(!d)return;
+    const dp=doorPointForEnemy(e,d,next);
+    const dc={x:d.x+d.w/2,y:d.y+d.h/2};
+    const distanceToDoor=Math.hypot((e.x+e.w/2)-dc.x,(e.y+e.h/2)-dc.y);
+    if(distanceToDoor<58)openDoorForAI(d);
+    moveEnemy(e,dp.x,dp.y,speed);
+  }
+
+  function resetEnemyRoute(e,index){
+    const route=PATROL_ROUTES[index];
+    const start=centerRoom(route[0]);
+    e.x=start.x-e.w/2;
+    e.y=start.y-e.h/2;
+    e.route=route;
+    e.routeIndex=1;
+    e.state='patrol';
+    e.search=0;
+    e.lastX=start.x;
+    e.lastY=start.y;
+    e.speed=index===0?1.18:1.12;
+  }
+
+  updateEnemy=function(e,index){
+    if(!running||paused||quizOpen||finalOpen)return;
+    if(performance.now()<enemyProtectionUntil)return;
+
+    const pc={x:player.x+player.w/2,y:player.y+player.h/2};
+    const ec={x:e.x+e.w/2,y:e.y+e.h/2};
+    const dPlayer=Math.hypot(pc.x-ec.x,pc.y-ec.y);
+
+    /* Captura por proximidad: si llega realmente cerca, pierdes. */
+    if(!player.hidden && dPlayer<=ENEMY_CATCH){gameOver();return;}
+
+    if(!player.hidden && see(e)){
+      e.state='chase';
+      e.lastX=pc.x;
+      e.lastY=pc.y;
+      e.search=240;
+    }
+
+    if(e.state==='patrol'){
+      if(!e.route||!e.route.length)resetEnemyRoute(e,index);
+      const targetRoom=e.route[e.routeIndex%e.route.length];
+      if(goToRoom(e,targetRoom,e.speed)){
+        e.routeIndex=(e.routeIndex+1)%e.route.length;
+        /* Pausa breve y natural antes del siguiente tramo. */
+        e.pauseUntil=performance.now()+350;
+      }
+      if(e.pauseUntil&&performance.now()<e.pauseUntil)return;
+    }
+    else if(e.state==='chase'){
+      if(player.hidden){
+        e.state='search';
+        e.search=220;
+        return;
+      }
+      const pr=roomAt(pc.x,pc.y);
+      const er=enemyRoom(e);
+      if(pr===er){
+        moveEnemy(e,pc.x,pc.y,e.speed*1.65);
+      }else{
+        goToRoom(e,pr,e.speed*1.45);
+      }
+      /* Mientras el jugador siga fuera del armario, el vigilante mantiene la persecución.
+         No pierde el rastro solo porque salga temporalmente de su cono de visión. */
+      if(player.hidden){
+        e.state='patrol';
+        e.search=0;
+        e.pauseUntil=performance.now()+250;
+        return;
+      }
+      const nd=Math.hypot(pc.x-(e.x+e.w/2),pc.y-(e.y+e.h/2));
+      if(nd<=ENEMY_CATCH){gameOver();return;}
+    }
+    else if(e.state==='search'){
+      const targetRoom=roomAt(e.lastX,e.lastY);
+      const er=enemyRoom(e);
+      if(targetRoom>=0 && er!==targetRoom){
+        goToRoom(e,targetRoom,e.speed*1.10);
+      }else{
+        const reached=moveEnemy(e,e.lastX,e.lastY,e.speed*1.10);
+        if(reached)e.search--;
+      }
+      if(!player.hidden&&see(e)){
+        e.state='chase';
+        e.lastX=pc.x;e.lastY=pc.y;e.search=240;
+      }else if(e.search<=0){
+        e.state='patrol';
+        e.pauseUntil=performance.now()+300;
+      }
+    }
+  };
+
+  /* Reiniciar los enemigos en posiciones correctas dentro de habitaciones reales. */
+  const oldReset=resetGame;
+  resetGame=function(){
+    oldReset();
+    resetEnemyRoute(enemies[0],0);
+    resetEnemyRoute(enemies[1],1);
+
+    /* Al comenzar no aparecen encima del jugador. Cada vigilante empieza
+       en una habitación lejana y el jugador tiene unos segundos para moverse. */
+    const safeStarts=[3,8];
+    enemies.forEach((e,i)=>{
+      const r=safeStarts[i];
+      const c=centerRoom(r);
+      e.x=c.x-e.w/2;
+      e.y=c.y-e.h/2;
+      e.routeIndex=e.route.indexOf(r)+1;
+      if(e.routeIndex<=0)e.routeIndex=1;
+      e.state='patrol';
+      e.search=0;
+      e.aiOpened=false;
+      e.pauseUntil=performance.now()+900;
+    });
+    enemyProtectionUntil=performance.now()+10000;
+  };
+
+  /* Indicador claro: amarillo patrulla, rojo persecución. */
+  const oldDraw=draw;
+  draw=function(){
+    oldDraw();
+    if(!running)return;
+    enemies.forEach(e=>{
+      if(enemyRoom(e)!==currentRoom)return;
+      const x=e.x+e.w/2;
+      const y=Math.max(18,e.y-22);
+      ctx.save();
+      ctx.textAlign='center';
+      ctx.font='bold 14px Arial';
+      ctx.fillStyle=e.state==='chase'?'#ff4e58':'#e7c56e';
+      ctx.fillText(e.state==='chase'?'!':'•',x,y);
+      ctx.restore();
+    });
+  };
+})();
+</script>
+<script id="furniture-and-closet-upgrade">
+(function(){
+  /* =========================================================
+     MUEBLES CON COLISIÓN + ARMARIOS FUNCIONALES + TEXTURAS
+     ========================================================= */
+
+  /* Reubicar muebles para dejar un camino amplio y un acceso limpio
+     al armario de cada habitación. */
+  function rebuildFurniture(){
+    furniture.length=0;
+    for(let i=0;i<12;i++){
+      const r=rooms[i];
+      furniture.push({x:r.x+52,y:r.y+62,w:105,h:48,room:i,type:'table'});
+      furniture.push({x:r.x+52,y:r.y+r.h-82,w:120,h:42,room:i,type:'chest'});
+      furniture.push({x:r.x+r.w-170,y:r.y+60,w:90,h:38,room:i,type:i%3===0?'bookshelf':(i%3===1?'desk':'bed')});
+    }
+  }
+  rebuildFurniture();
+
+  /* Colisión de jugador con muebles. Los enemigos conservan su navegación
+     por habitaciones y no quedan atrapados en el mobiliario. */
+  collides=function(x,y,w,h){
+    const a={x,y,w,h};
+    for(const wall of walls) if(rectHit(a,wall)) return true;
+    for(const d of doors) if(!d.open && rectHit(a,d)) return true;
+
+    /* Solo el jugador choca con los muebles. */
+    const isPlayer=(w===player.w && h===player.h);
+    if(isPlayer){
+      for(const f of furniture){
+        if(rectHit(a,{x:f.x-4,y:f.y-4,w:f.w+8,h:f.h+8})) return true;
+      }
+    }
+    return false;
+  };
+
+  /* El armario tiene una zona de interacción grande para que sea fácil
+     esconderse, aunque el personaje no esté exactamente en el centro. */
+  nearestCloset=function(){
+    let best=null,bd=82;
+    const px=player.x+player.w/2, py=player.y+player.h/2;
+    for(const c of closets){
+      if(c.room!==currentRoom) continue;
+      const dd=dist(px,py,c.x+c.w/2,c.y+c.h/2);
+      if(dd<bd){best=c;bd=dd;}
+    }
+    return best;
+  };
+
+  /* Dibujar muebles con más detalle. */
+  drawDetailedFurniture=function(){
+    furniture.forEach(f=>{
+      if(f.room!==currentRoom) return;
+      ctx.save();
+      const x=f.x,y=f.y,w=f.w,h=f.h;
+
+      if(f.type==='table'){
+        /* Mesa de madera */
+        ctx.fillStyle='#5a3927'; ctx.fillRect(x,y,w,h);
+        ctx.fillStyle='#7a5237'; ctx.fillRect(x+5,y+5,w-10,8);
+        ctx.fillStyle='#3b241a'; ctx.fillRect(x+8,y+h-8,10,8); ctx.fillRect(x+w-18,y+h-8,10,8);
+        ctx.strokeStyle='#a97850'; ctx.lineWidth=2; ctx.strokeRect(x,y,w,h);
+        ctx.strokeStyle='rgba(240,190,130,.22)'; ctx.lineWidth=1;
+        for(let k=12;k<w-5;k+=18){ctx.beginPath();ctx.moveTo(x+k,y+15);ctx.lineTo(x+k-8,y+h-12);ctx.stroke();}
+      }else if(f.type==='chest'){
+        /* Baúl */
+        ctx.fillStyle='#4a2c20';ctx.fillRect(x,y,w,h);
+        ctx.fillStyle='#6c432b';ctx.fillRect(x+5,y+5,w-10,h/2-3);
+        ctx.fillStyle='#382018';ctx.fillRect(x+5,y+h/2,w-10,h/2-5);
+        ctx.fillStyle='#d0a14f';ctx.fillRect(x+w/2-5,y+h/2-4,10,8);
+        ctx.strokeStyle='#9a6845';ctx.lineWidth=2;ctx.strokeRect(x,y,w,h);
+      }else if(f.type==='bookshelf'){
+        /* Estantería */
+        ctx.fillStyle='#432a22';ctx.fillRect(x,y,w,h+34);
+        ctx.fillStyle='#744b34';ctx.fillRect(x+5,y+5,w-10,5);
+        ctx.fillRect(x+5,y+35,w-10,5);ctx.fillRect(x+5,y+65,w-10,5);
+        const bookColors=['#8c4b4b','#536b82','#b38a50','#6b7b55','#7b5a78'];
+        for(let row=0;row<2;row++) for(let k=0;k<7;k++){
+          ctx.fillStyle=bookColors[(k+row)%bookColors.length];
+          ctx.fillRect(x+10+k*11,y+11+row*30,8,23);
+        }
+        ctx.strokeStyle='#a87855';ctx.lineWidth=2;ctx.strokeRect(x,y,w,h+34);
+      }else if(f.type==='desk'){
+        /* Escritorio */
+        ctx.fillStyle='#4b3024';ctx.fillRect(x,y,w,h);
+        ctx.fillStyle='#795238';ctx.fillRect(x+4,y+4,w-8,10);
+        ctx.fillStyle='#352119';ctx.fillRect(x+8,y+h-6,9,18);ctx.fillRect(x+w-17,y+h-6,9,18);
+        ctx.fillStyle='#d8c5a5';ctx.fillRect(x+22,y+18,35,14);
+        ctx.strokeStyle='#a97953';ctx.lineWidth=2;ctx.strokeRect(x,y,w,h);
+      }else if(f.type==='bed'){
+        /* Cama */
+        ctx.fillStyle='#4b3028';ctx.fillRect(x,y,w,h+24);
+        ctx.fillStyle='#d0c3aa';ctx.fillRect(x+8,y+13,w-16,h-5);
+        ctx.fillStyle='#7d4f5b';ctx.fillRect(x+12,y+18,42,22);
+        ctx.fillStyle='#e3d7c1';ctx.fillRect(x+16,y+5,40,16);
+        ctx.strokeStyle='#a8785c';ctx.lineWidth=2;ctx.strokeRect(x,y,w,h+24);
+      }
+      ctx.restore();
+    });
+  };
+
+  /* Armarios con puertas, bisagras, tirador y ranuras. */
+  drawDetailedClosets=function(){
+    closets.forEach(c=>{
+      if(c.room!==currentRoom) return;
+      ctx.save();
+      const inside=player.hidden && player.closet===c;
+      ctx.fillStyle=inside?'#241b1d':'#4a302c';
+      ctx.fillRect(c.x,c.y,c.w,c.h);
+      ctx.fillStyle='#654137';
+      ctx.fillRect(c.x+5,c.y+5,c.w/2-7,c.h-10);
+      ctx.fillRect(c.x+c.w/2+2,c.y+5,c.w/2-7,c.h-10);
+      ctx.strokeStyle='#a87558';ctx.lineWidth=2;ctx.strokeRect(c.x,c.y,c.w,c.h);
+      ctx.strokeStyle='rgba(220,170,120,.35)';ctx.lineWidth=1;
+      ctx.strokeRect(c.x+7,c.y+7,c.w/2-11,c.h-14);
+      ctx.strokeRect(c.x+c.w/2+5,c.y+7,c.w/2-11,c.h-14);
+      ctx.fillStyle='#d5ad62';
+      ctx.beginPath();ctx.arc(c.x+c.w/2-5,c.y+c.h/2,2.5,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(c.x+c.w/2+5,c.y+c.h/2,2.5,0,Math.PI*2);ctx.fill();
+      if(!inside){
+        ctx.fillStyle='rgba(255,220,170,.15)';ctx.fillRect(c.x+4,c.y+4,c.w-8,8);
+      }
+      ctx.restore();
+    });
+  };
+
+  /* Sustituir la parte de muebles/armarios del render sin cambiar el resto. */
+  const oldDraw=draw;
+  draw=function(){
+    oldDraw();
+    /* Dibujar encima con detalle solo en la habitación actual. */
+    const r=currentRoom>=0?rooms[currentRoom]:null;
+    if(!r)return;
+    const pad=14;
+    const scale=Math.min((W-pad*2)/r.w,(H-110-pad*2)/r.h);
+    const ox=(W-r.w*scale)/2-r.x*scale;
+    const oy=88+(H-88-r.h*scale)/2-r.y*scale;
+    ctx.save();ctx.translate(ox,oy);ctx.scale(scale,scale);
+    drawDetailedFurniture();
+    drawDetailedClosets();
+    ctx.restore();
+  };
+
+  /* El personaje no puede aparecer dentro de un mueble al iniciar o
+     cambiar de habitación. */
+  function safePosition(){
+    const r=rooms[currentRoom];
+    const spots=[
+      {x:r.x+r.w/2-12,y:r.y+r.h/2-17},
+      {x:r.x+190,y:r.y+170},
+      {x:r.x+250,y:r.y+100}
+    ];
+    for(const p of spots){
+      if(!collides(p.x,p.y,player.w,player.h)){player.x=p.x;player.y=p.y;return;}
+    }
+  }
+  const oldReset=resetGame;
+  resetGame=function(){oldReset();safePosition();};
+
+  /* Mensaje más claro al acercarse a un armario. */
+  const oldUpdateInteraction=updateInteraction;
+  updateInteraction=function(){
+    oldUpdateInteraction();
+    if(player.hidden)return;
+    const c=nearestCloset();
+    if(c){
+      const el=document.getElementById('interact');
+      el.textContent='[E] ESCONDERSE EN EL ARMARIO';
+      el.style.display='block';
+    }
+  };
+})();
+</script>
+<script id="room-visual-variation">(function(){
+const originalDraw=draw;
+const names=['VESTÍBULO','BIBLIOTECA','ESTUDIO','GALERÍA','COMEDOR','SALÓN','SALA DE MÚSICA','DORMITORIO','COCINA','LABORATORIO','SÓTANO','CAPILLA'];
+const accents=[['#b78b5c','PORTÓN'],['#8b5e3c','LIBROS'],['#6c7c91','ESCRITORIO'],['#9b6f9b','CUADROS'],['#b08b52','MESA'],['#697d7c','SOFÁS'],['#7d6aa5','PIANO'],['#805b68','CAMA'],['#a47c4c','UTENSILIOS'],['#4b8b82','EQUIPO'],['#62506f','CALDERA'],['#a17b52','ALTAR']];
+function roomAccent(){const r=rooms[currentRoom];if(!r)return;ctx.save();const pad=14,scale=Math.min((W-pad*2)/r.w,(H-110-pad*2)/r.h),ox=(W-r.w*scale)/2-r.x*scale,oy=88+(H-88-r.h*scale)/2-r.y*scale;ctx.translate(ox,oy);ctx.scale(scale,scale);const a=accents[currentRoom]||accents[0];ctx.fillStyle=a[0];ctx.globalAlpha=.75;ctx.fillRect(r.x+18,r.y+18,7,55);ctx.globalAlpha=1;ctx.fillStyle='#e8dfc9';ctx.font='bold 15px Arial';ctx.fillText(names[currentRoom],r.x+34,r.y+31);ctx.font='10px Arial';ctx.fillStyle='#aaa';ctx.fillText(a[1],r.x+34,r.y+46);if(currentRoom===6){ctx.strokeStyle='#8b7ac0';ctx.lineWidth=3;ctx.strokeRect(r.x+35,r.y+65,80,45)}if(currentRoom===4){ctx.fillStyle='#8f6b3d';ctx.fillRect(r.x+160,r.y+120,100,38)}if(currentRoom===9){ctx.strokeStyle='#70b7aa';ctx.beginPath();ctx.arc(r.x+110,r.y+115,38,0,Math.PI*2);ctx.stroke()}ctx.restore()}
+window.draw=function(){originalDraw();roomAccent()};
+})();</script>
+
+<script id="final-game-balance-patch">
+/* ===== AJUSTES FINALES: ARMARIOS, ENEMIGOS Y TIEMPO ===== */
+(function(){
+  /* Los enemigos empiezan lejos de las puertas y de la posición inicial. */
+  const originalResetGame = resetGame;
+  resetGame = function(){
+    originalResetGame();
+    const startA = rooms[5];   // Salón
+    const startB = rooms[8];   // Cocina
+    enemies[0].x = startA.x + startA.w/2 - enemies[0].w/2;
+    enemies[0].y = startA.y + startA.h/2 - enemies[0].h/2;
+    enemies[0].facing = -1;
+    enemies[0].state = 'patrol';
+    enemies[0].target = 0;
+    enemies[0].search = 0;
+    enemies[0].lastX = enemies[0].x;
+    enemies[0].lastY = enemies[0].y;
+
+    enemies[1].x = startB.x + startB.w/2 - enemies[1].w/2;
+    enemies[1].y = startB.y + startB.h/2 - enemies[1].h/2;
+    enemies[1].facing = 1;
+    enemies[1].state = 'patrol';
+    enemies[1].target = 0;
+    enemies[1].search = 0;
+    enemies[1].lastX = enemies[1].x;
+    enemies[1].lastY = enemies[1].y;
+
+    /* Un pequeño margen inicial para que puedas orientarte. */
+    enemyProtectionUntil = performance.now() + 12000;
+    updateHUD();
+  };
+
+  /* Respuesta incorrecta: resta 60 segundos del reloj. */
+  answerDoor = function(a){
+    if(a === currentQuestion[3]){
+      currentDoor.locked = false;
+      currentDoor.quizDone = true;
+      currentDoor.open = true;
+      document.getElementById('quizResult').textContent = '✓ Correcto. La puerta se abrió.';
+      setTimeout(()=>{
+        document.getElementById('doorQuiz').classList.add('hidden');
+        quizOpen = false;
+        paused = false;
+        showMsg('Puerta abierta. Puedes continuar.');
+      },650);
+    }else{
+      timeLeft = Math.max(0, timeLeft - 60);
+      updateHUD();
+      document.getElementById('quizResult').textContent = '✗ Incorrecto. Has perdido 1 minuto.';
+      showMsg('Respuesta incorrecta: -1 minuto');
+      if(timeLeft <= 0){
+        document.getElementById('doorQuiz').classList.add('hidden');
+        quizOpen = false;
+        paused = false;
+        gameOver();
+      }
+    }
+  };
+
+  /* Al interactuar con el armario, el jugador entra completamente en él. */
+  hideIn = function(c){
+    if(!c) return;
+    player.hidden = true;
+    player.closet = c;
+    player.x = c.x + c.w/2 - player.w/2;
+    player.y = c.y + c.h/2 - player.h/2;
+
+    /* El enemigo pierde inmediatamente el objetivo al verte desaparecer. */
+    enemies.forEach(e=>{
+      if(e.state === 'chase' || e.state === 'search'){
+        e.state = 'patrol';
+        e.search = 0;
+        e.lastX = e.x;
+        e.lastY = e.y;
+        e.pauseUntil = performance.now() + 1200;
+      }
+    });
+
+    showMsg('Te escondiste en el armario. El enemigo perdió tu rastro.');
+    updateInteraction();
+  };
+
+  /* Salir siempre te deja al costado del armario, no dentro del mueble. */
+  leaveHide = function(){
+    player.hidden = false;
+    if(player.closet){
+      const c = player.closet;
+      player.x = c.x + c.w + 10;
+      player.y = c.y + c.h/2 - player.h/2;
+      if(collides(player.x,player.y,player.w,player.h)){
+        player.x = c.x - player.w - 10;
+      }
+    }
+    player.closet = null;
+    updateInteraction();
+  };
+})();
+</script>
+
+</body>
+
+<script id="visual-stability-final-fix">
+(function(){
+  /* ===== PARCHE DE VISIBILIDAD Y ESTABILIDAD ===== */
+  const canvas=document.getElementById('canvas');
+  if(!canvas || !ctx) return;
+
+  const palettes=[
+    ['#34495e','#d6b06d','#1d2730'],      // Vestíbulo
+    ['#5a3b2e','#c99b5c','#241713'],      // Biblioteca
+    ['#40566b','#b8c7d5','#18232d'],      // Estudio
+    ['#563b64','#d6a7e0','#24182b'],      // Galería
+    ['#6b512f','#e0b86d','#2b2115'],      // Comedor
+    ['#38595a','#9ac1bc','#172628'],      // Salón
+    ['#493e73','#c4b5ef','#201a35'],      // Música
+    ['#6d3d4b','#e3a0ad','#29171e'],      // Dormitorio
+    ['#76552e','#e4c27c','#2a1d11'],      // Cocina
+    ['#28645e','#8de0d1','#122522'],      // Laboratorio
+    ['#493b59','#b99acb','#1b1520'],      // Sótano
+    ['#654438','#e0b57f','#281914']       // Capilla
+  ];
+  const roomNames=['VESTÍBULO','BIBLIOTECA','ESTUDIO','GALERÍA','COMEDOR','SALÓN','SALA DE MÚSICA','DORMITORIO','COCINA','LABORATORIO','SÓTANO','CAPILLA'];
+
+  function roomTransform(r){
+    const pad=18;
+    const scale=Math.min((W-pad*2)/r.w,(H-115-pad*2)/r.h);
+    const ox=(W-r.w*scale)/2-r.x*scale;
+    const oy=90+(H-90-r.h*scale)/2-r.y*scale;
+    ctx.save();ctx.translate(ox,oy);ctx.scale(scale,scale);return scale;
+  }
+  function text(txt,x,y,size,fill='#fff',align='left'){
+    ctx.fillStyle=fill;ctx.font='bold '+size+'px Arial';ctx.textAlign=align;ctx.fillText(txt,x,y);
+  }
+  function drawRoomDecor(r,i){
+    const [floor,trim,dark]=palettes[i]||palettes[0];
+    ctx.fillStyle=floor;ctx.fillRect(r.x,r.y,r.w,r.h);
+    /* Piso con patrón diferente pero visible. */
+    for(let y=r.y;y<r.y+r.h;y+=24){
+      for(let x=r.x;x<r.x+r.w;x+=24){
+        ctx.fillStyle=((Math.floor((x-r.x)/24)+Math.floor((y-r.y)/24))%2===0)?floor:dark;
+        ctx.fillRect(x,y,24,24);
+      }
+    }
+    ctx.strokeStyle=trim;ctx.lineWidth=7;ctx.strokeRect(r.x+3,r.y+3,r.w-6,r.h-6);
+    ctx.fillStyle='rgba(0,0,0,.22)';ctx.fillRect(r.x,r.y,r.w,38);
+    text(roomNames[i]||r.name,r.x+18,r.y+25,14,trim);
+
+    const addRect=(x,y,w,h,c,b=trim)=>{ctx.fillStyle=c;ctx.fillRect(x,y,w,h);ctx.strokeStyle=b;ctx.lineWidth=2;ctx.strokeRect(x,y,w,h)};
+    switch(i){
+      case 0: addRect(r.x+55,r.y+75,125,50,'#8a633f'); addRect(r.x+250,r.y+70,90,75,'#527052'); break;
+      case 1:
+        for(let s=0;s<2;s++){addRect(r.x+48+s*190,r.y+58,135,100,'#40291f');for(let k=0;k<7;k++)addRect(r.x+58+s*190+k*17,r.y+78,11,58,['#b64f52','#5979a1','#c49b55','#5f8b68'][k%4]);}
+        addRect(r.x+145,r.y+195,130,45,'#7b5738');break;
+      case 2: addRect(r.x+60,r.y+70,145,55,'#704d35');addRect(r.x+250,r.y+65,85,110,'#344858');addRect(r.x+95,r.y+135,80,45,'#c6b99b');break;
+      case 3: for(let k=0;k<3;k++){addRect(r.x+50+k*125,r.y+65,82,92,['#7d4f58','#4f6b7f','#8a7045'][k]);} break;
+      case 4: addRect(r.x+120,r.y+115,180,65,'#815c38');for(let k=0;k<4;k++)addRect(r.x+130+k*48,r.y+188,32,22,'#6a4932');break;
+      case 5: addRect(r.x+55,r.y+72,120,58,'#54777a');addRect(r.x+245,r.y+72,120,58,'#54777a');ctx.fillStyle='#a9845c';ctx.beginPath();ctx.arc(r.x+210,r.y+195,36,0,Math.PI*2);ctx.fill();break;
+      case 6: addRect(r.x+90,r.y+70,175,95,'#553c31');for(let k=0;k<4;k++)addRect(r.x+108+k*38,r.y+92,26,48,'#b28a55');addRect(r.x+275,r.y+190,90,30,'#74523c');break;
+      case 7: addRect(r.x+55,r.y+75,170,95,'#8e5260');addRect(r.x+65,r.y+85,150,28,'#d5c4b1');addRect(r.x+280,r.y+65,70,100,'#53372f');break;
+      case 8: for(let k=0;k<3;k++)addRect(r.x+48+k*105,r.y+70,82,50,'#a77943');for(let k=0;k<4;k++){ctx.fillStyle='#c9d1d2';ctx.beginPath();ctx.arc(r.x+85+k*70,r.y+175,18,0,Math.PI*2);ctx.fill();}break;
+      case 9: addRect(r.x+50,r.y+70,125,55,'#426b66');addRect(r.x+215,r.y+70,125,55,'#426b66');ctx.strokeStyle='#9be5d8';ctx.lineWidth=4;ctx.beginPath();ctx.arc(r.x+115,r.y+195,32,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.arc(r.x+290,r.y+195,25,0,Math.PI*2);ctx.stroke();break;
+      case 10: for(let k=0;k<3;k++)addRect(r.x+48+k*112,r.y+65,78,80,'#58455d');for(let k=0;k<5;k++){ctx.strokeStyle='#a88db4';ctx.beginPath();ctx.moveTo(r.x+55+k*65,r.y+205);ctx.lineTo(r.x+85+k*65,r.y+235);ctx.stroke();}break;
+      case 11: addRect(r.x+145,r.y+65,130,50,'#8b6647');addRect(r.x+110,r.y+180,200,35,'#79563d');ctx.fillStyle='#d6b86d';ctx.fillRect(r.x+202,r.y+42,8,48);ctx.fillRect(r.x+180,r.y+62,52,8);break;
+    }
+  }
+
+  draw=function(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#11151b';ctx.fillRect(0,0,W,H);
+    const r=(currentRoom>=0&&rooms[currentRoom])?rooms[currentRoom]:rooms[0];
+    if(currentRoom<0) currentRoom=0;
+    roomTransform(r);
+    drawRoomDecor(r,currentRoom);
+
+    /* Paredes y puertas */
+    walls.forEach(w=>{if(rectHit(w,r)){ctx.fillStyle='#2b3339';ctx.strokeStyle='#657078';ctx.lineWidth=2;ctx.fillRect(w.x,w.y,w.w,w.h);ctx.strokeRect(w.x,w.y,w.w,w.h);}});
+    doors.forEach(d=>{if(d.roomA===currentRoom||d.roomB===currentRoom){ctx.fillStyle=d.open?'#a98a6a':'#743d48';ctx.fillRect(d.x,d.y,d.w,d.h);ctx.strokeStyle='#e0bd8c';ctx.lineWidth=3;ctx.strokeRect(d.x,d.y,d.w,d.h);if(!d.open){ctx.fillStyle='#f1d27b';ctx.beginPath();ctx.arc(d.x+d.w/2,d.y+d.h/2,4,0,Math.PI*2);ctx.fill();}}});
+
+    /* Armarios: puerta cerrada visible y lugar real de escondite. */
+    closets.forEach(c=>{if(c.room!==currentRoom)return;const inside=player.hidden&&player.closet===c;ctx.fillStyle=inside?'#24191b':'#68433b';ctx.fillRect(c.x,c.y,c.w,c.h);ctx.strokeStyle='#d09b72';ctx.lineWidth=3;ctx.strokeRect(c.x,c.y,c.w,c.h);ctx.strokeStyle='#9b6959';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(c.x+c.w/2,c.y+6);ctx.lineTo(c.x+c.w/2,c.y+c.h-6);ctx.stroke();ctx.fillStyle='#e0c27d';ctx.fillRect(c.x+c.w/2-10,c.y+c.h/2,5,8);ctx.fillRect(c.x+c.w/2+5,c.y+c.h/2,5,8);if(inside){ctx.fillStyle='#171116';ctx.fillRect(c.x+4,c.y+4,c.w-8,c.h-8);text('OCULTO',c.x+c.w/2,c.y+c.h/2+4,9,'#d7b9a0','center');}});
+
+    furniture.forEach(f=>{if(f.room!==currentRoom)return;ctx.fillStyle='#5c402e';ctx.strokeStyle='#b18762';ctx.lineWidth=2;ctx.fillRect(f.x,f.y,f.w,f.h);ctx.strokeRect(f.x,f.y,f.w,f.h);});
+    clues.forEach(o=>{if(!o.collected&&o.room===currentRoom){ctx.fillStyle='#f1d36f';ctx.fillRect(o.x-7,o.y-7,14,14);ctx.strokeStyle='#fff4b0';ctx.strokeRect(o.x-7,o.y-7,14,14);}});
+    if(!key.collected&&roomAt(key.x,key.y)===currentRoom){ctx.fillStyle='#ffe47b';ctx.fillRect(key.x-5,key.y-5,10,10);ctx.fillRect(key.x+4,key.y-2,13,4);text('LLAVE',key.x+20,key.y+4,9,'#ffe47b');}
+    if(roomAt(exit.x+35,exit.y+12)===currentRoom){ctx.fillStyle='#477e58';ctx.fillRect(exit.x,exit.y,exit.w,exit.h);ctx.strokeStyle='#d7c08e';ctx.strokeRect(exit.x,exit.y,exit.w,exit.h);}
+
+    enemies.forEach(e=>{if(roomAt(e.x+12,e.y+18)!==currentRoom)return;ctx.fillStyle=e.state==='chase'?'#a83c48':e.color;ctx.fillRect(e.x,e.y,e.w,e.h);ctx.fillStyle='#9b684f';ctx.beginPath();ctx.arc(e.x+12,e.y-8,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ff6262';ctx.fillRect(e.x+5,e.y-11,3,3);ctx.fillRect(e.x+16,e.y-11,3,3);});
+
+    if(!player.hidden){ctx.fillStyle='#315789';ctx.fillRect(player.x,player.y+10,player.w,player.h-10);ctx.fillStyle='#9b6a51';ctx.fillRect(player.x+2,player.y-5,20,20);ctx.fillStyle='#5b3d2c';ctx.fillRect(player.x+2,player.y-7,20,6);ctx.fillStyle='#24334b';ctx.fillRect(player.x-5,player.y+16,5,15);ctx.fillRect(player.x+player.w,player.y+16,5,15);ctx.fillStyle='#d8e3ef';ctx.fillRect(player.x+5,player.y+13,14,6);}
+
+    /* Señalizaciones de la llave */
+    const hints={0:'PISTA: sigue hacia las habitaciones interiores',3:'PISTA: busca pistas en los cuadros',7:'PISTA: la llave no está lejos',9:'PISTA: revisa el sótano',10:'PISTA: ¡aquí puede estar la llave!'};
+    if(hints[currentRoom]){ctx.fillStyle='#171d24';ctx.fillRect(r.x+28,r.y+r.h-46,r.w-56,28);ctx.strokeStyle='#e0bd68';ctx.lineWidth=2;ctx.strokeRect(r.x+28,r.y+r.h-46,r.w-56,28);text(hints[currentRoom],r.x+r.w/2,r.y+r.h-27,10,'#f2d47e','center');}
+    ctx.restore();
+    ctx.strokeStyle='#4b4f56';ctx.lineWidth=3;ctx.strokeRect(2,2,W-4,H-4);
+  };
+
+  /* Asegura que el juego nunca quede con el canvas oculto o completamente negro. */
+  const gs=document.getElementById('gameScreen');
+  if(gs){gs.style.background='#101217';}
+  canvas.style.background='#15191f';
+  canvas.style.visibility='visible';
+  canvas.style.opacity='1';
+
+  /* Si el jugador ya inició, fuerza una primera actualización visual. */
+  if(typeof resetGame==='function' && typeof running!=='undefined' && running){
+    currentRoom=roomAt(player.x+player.w/2,player.y+player.h/2);
+    if(currentRoom<0) currentRoom=0;
+    updateHUD();draw();
+  }
+})();
+</script>
+
+</html>
+<script id="final-room-closet-polish">
+(function(){
+  /* ===== HABITACIONES REALMENTE DIFERENTES ===== */
+  const themes=[
+    {floor:'#4a3a2b',wall:'#211b18',trim:'#b78b5c',extra:'lobby'},
+    {floor:'#3b2a22',wall:'#171318',trim:'#9d704e',extra:'library'},
+    {floor:'#34404b',wall:'#171c22',trim:'#7890a6',extra:'study'},
+    {floor:'#43304b',wall:'#1c1822',trim:'#b080b8',extra:'gallery'},
+    {floor:'#51422b',wall:'#211a12',trim:'#c49b59',extra:'dining'},
+    {floor:'#354343',wall:'#151c1e',trim:'#77928e',extra:'salon'},
+    {floor:'#393151',wall:'#171524',trim:'#8e7dc0',extra:'music'},
+    {floor:'#54343d',wall:'#21171b',trim:'#b97884',extra:'bedroom'},
+    {floor:'#59462d',wall:'#211b12',trim:'#d0a35e',extra:'kitchen'},
+    {floor:'#294b48',wall:'#111b1a',trim:'#6bb3aa',extra:'lab'},
+    {floor:'#382d46',wall:'#121118',trim:'#806a96',extra:'basement'},
+    {floor:'#51362f',wall:'#1b1517',trim:'#c49a72',extra:'chapel'}
+  ];
+
+  /* Armarios lejos de puertas: esquina inferior derecha, dejando pasillo libre. */
+  closets.forEach(c=>{
+    const r=rooms[c.room];
+    c.w=56; c.h=96;
+    c.x=r.x+r.w-c.w-22;
+    c.y=r.y+r.h-c.h-20;
+  });
+
+  /* Muebles con distribución propia por habitación. */
+  furniture.length=0;
+  rooms.forEach((r,i)=>{
+    const add=(x,y,w,h,type)=>furniture.push({x,y,w,h,room:i,type});
+    switch(i){
+      case 0: add(r.x+70,r.y+75,100,48,'reception'); add(r.x+245,r.y+80,100,35,'plant'); break;
+      case 1: add(r.x+55,r.y+65,115,55,'bookshelf'); add(r.x+205,r.y+65,115,55,'bookshelf'); add(r.x+135,r.y+175,150,45,'reading'); break;
+      case 2: add(r.x+70,r.y+75,130,48,'desk'); add(r.x+235,r.y+65,90,110,'cabinet'); break;
+      case 3: add(r.x+70,r.y+65,75,95,'painting'); add(r.x+185,r.y+65,75,95,'painting'); add(r.x+300,r.y+65,55,95,'painting'); break;
+      case 4: add(r.x+125,r.y+125,170,55,'dining'); add(r.x+60,r.y+65,65,40,'chair'); add(r.x+295,r.y+65,65,40,'chair'); break;
+      case 5: add(r.x+65,r.y+75,120,55,'sofa'); add(r.x+225,r.y+75,120,55,'sofa'); add(r.x+150,r.y+180,120,45,'table'); break;
+      case 6: add(r.x+105,r.y+70,150,100,'piano'); add(r.x+270,r.y+175,75,35,'bench'); break;
+      case 7: add(r.x+70,r.y+75,155,90,'bed'); add(r.x+270,r.y+70,75,80,'wardrobe'); break;
+      case 8: add(r.x+65,r.y+70,85,45,'counter'); add(r.x+185,r.y+70,85,45,'counter'); add(r.x+305,r.y+70,55,45,'counter'); break;
+      case 9: add(r.x+65,r.y+70,100,55,'labtable'); add(r.x+205,r.y+70,100,55,'labtable'); add(r.x+315,r.y+155,50,70,'tank'); break;
+      case 10: add(r.x+65,r.y+65,85,75,'crate'); add(r.x+180,r.y+65,85,75,'crate'); add(r.x+295,r.y+65,65,75,'crate'); break;
+      case 11: add(r.x+145,r.y+70,130,45,'altar'); add(r.x+110,r.y+175,200,35,'bench'); break;
+    }
+  });
+
+  function transformRoom(){
+    const r=rooms[currentRoom]; const pad=14;
+    const scale=Math.min((W-pad*2)/r.w,(H-110-pad*2)/r.h);
+    const ox=(W-r.w*scale)/2-r.x*scale;
+    const oy=88+(H-88-r.h*scale)/2-r.y*scale;
+    ctx.save();ctx.translate(ox,oy);ctx.scale(scale,scale);return r;
+  }
+
+  const oldDraw=draw;
+  draw=function(){
+    oldDraw();
+    const r=transformRoom();
+    if(!r){ctx.restore();return;}
+    const t=themes[currentRoom]||themes[0];
+    /* Marco y zócalos únicos */
+    ctx.fillStyle=t.trim; ctx.globalAlpha=.8; ctx.fillRect(r.x+12,r.y+12,r.w-24,6); ctx.fillRect(r.x+12,r.y+r.h-18,r.w-24,6); ctx.globalAlpha=1;
+
+    /* Elementos visuales por tipo */
+    if(t.extra==='lobby'){ctx.fillStyle='#bca06c';ctx.fillRect(r.x+155,r.y+45,110,8);ctx.fillStyle='#6d5542';ctx.fillRect(r.x+165,r.y+55,90,8);}
+    if(t.extra==='library'){for(let k=0;k<8;k++){ctx.fillStyle=['#9a4c4c','#526c88','#b08b4f','#637a58'][k%4];ctx.fillRect(r.x+58+k*13,r.y+125,9,35);}}
+    if(t.extra==='study'){ctx.fillStyle='#cbbf9e';ctx.fillRect(r.x+95,r.y+145,80,45);ctx.strokeStyle=t.trim;ctx.strokeRect(r.x+95,r.y+145,80,45);}
+    if(t.extra==='gallery'){for(let k=0;k<3;k++){ctx.strokeStyle=t.trim;ctx.lineWidth=3;ctx.strokeRect(r.x+55+k*115,r.y+180,75,60);}}
+    if(t.extra==='dining'){ctx.fillStyle='#8b663b';ctx.fillRect(r.x+125,r.y+120,170,8);ctx.fillRect(r.x+125,r.y+172,170,8);}
+    if(t.extra==='salon'){ctx.fillStyle='#586e6e';ctx.beginPath();ctx.arc(r.x+210,r.y+190,32,0,Math.PI*2);ctx.fill();}
+    if(t.extra==='music'){ctx.fillStyle='#8e6a45';ctx.fillRect(r.x+105,r.y+70,145,8);ctx.fillStyle='#d4c09c';ctx.fillRect(r.x+145,r.y+90,12,42);ctx.fillRect(r.x+185,r.y+90,12,42);}
+    if(t.extra==='bedroom'){ctx.fillStyle='#b46c78';ctx.fillRect(r.x+90,r.y+75,130,55);}
+    if(t.extra==='kitchen'){ctx.fillStyle='#d0a35e';for(let k=0;k<4;k++)ctx.fillRect(r.x+70+k*75,r.y+125,50,6);}
+    if(t.extra==='lab'){ctx.strokeStyle='#76c8bd';ctx.lineWidth=3;ctx.beginPath();ctx.arc(r.x+150,r.y+190,32,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.arc(r.x+290,r.y+190,22,0,Math.PI*2);ctx.stroke();}
+    if(t.extra==='basement'){ctx.strokeStyle='#74627f';ctx.lineWidth=5;for(let k=0;k<5;k++){ctx.beginPath();ctx.moveTo(r.x+55+k*75,r.y+210);ctx.lineTo(r.x+85+k*75,r.y+235);ctx.stroke();}}
+    if(t.extra==='chapel'){ctx.fillStyle='#b99b70';ctx.fillRect(r.x+198,r.y+55,14,65);ctx.fillRect(r.x+178,r.y+78,55,10);}
+
+    /* Señalización de la ruta de la llave */
+    const signs=[
+      [0,'PISTA → BUSCA HACIA EL SÓTANO'],
+      [3,'PISTA → SIGUE POR LAS HABITACIONES'],
+      [7,'PISTA → LA LLAVE ESTÁ CERCA'],
+      [9,'PISTA → BAJA AL SÓTANO'],
+      [10,'¡LLAVE! REVISA ESTA HABITACIÓN']
+    ];
+    const sign=signs.find(s=>s[0]===currentRoom);
+    if(sign){
+      ctx.fillStyle='#1b2026';ctx.fillRect(r.x+25,r.y+r.h-48,r.w-50,26);
+      ctx.strokeStyle='#d8b55f';ctx.lineWidth=2;ctx.strokeRect(r.x+25,r.y+r.h-48,r.w-50,26);
+      ctx.fillStyle='#f0d789';ctx.font='bold 11px Arial';ctx.textAlign='center';ctx.fillText(sign[1],r.x+r.w/2,r.y+r.h-31);ctx.textAlign='left';
+    }
+    ctx.restore();
+  };
+
+  /* ===== ARMARIO: E TE METE DENTRO DE VERDAD ===== */
+  hideIn=function(c){
+    if(!c)return;
+    player.hidden=true; player.closet=c;
+    /* El centro del jugador queda dentro del volumen del armario. */
+    player.x=c.x+c.w/2-player.w/2;
+    player.y=c.y+c.h/2-player.h/2;
+    enemies.forEach(e=>{
+      if(e.state==='chase'||e.state==='search'){
+        e.state='patrol';e.search=0;e.lastX=e.x;e.lastY=e.y;e.pauseUntil=performance.now()+1600;
+      }
+    });
+    showMsg('Te metiste en el armario. El enemigo perdió tu rastro.');
+    updateInteraction();
+  };
+
+  leaveHide=function(){
+    const c=player.closet; if(!c)return;
+    player.hidden=false;
+    /* Salida frontal, con varios puntos de respaldo para no aparecer dentro de una pared. */
+    const spots=[
+      {x:c.x-player.w-10,y:c.y+c.h/2-player.h/2},
+      {x:c.x+c.w+10,y:c.y+c.h/2-player.h/2},
+      {x:c.x+c.w/2-player.w/2,y:c.y+c.h+10},
+      {x:c.x+c.w/2-player.w/2,y:c.y-player.h-10}
+    ];
+    const good=spots.find(p=>!collides(p.x,p.y,player.w,player.h));
+    if(good){player.x=good.x;player.y=good.y;}
+    player.closet=null;updateInteraction();
+  };
+
+  /* El aviso solo aparece cuando realmente estás junto al armario. */
+  const oldInteraction=updateInteraction;
+  updateInteraction=function(){
+    oldInteraction();
+    if(player.hidden)return;
+    const c=nearestCloset();
+    if(c){const el=document.getElementById('interact');el.textContent='[E] ENTRAR AL ARMARIO';el.style.display='block';}
+  };
+})();
+</script>
+</body>
+</html>
